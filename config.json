@@ -1,0 +1,10 @@
+{ 
+    "name": "Maker Teleport",
+    "description": "Maker Teleport",
+    "palette": {
+        "text": "black",
+        "background": "white"
+    },
+    "logo": "/images/logo.png",
+    "favicon": "/images/logo.png"
+}
