@@ -6,6 +6,8 @@ type Config = {
   palette: {
     text: string;
     background: string;
+    maker: string;
+    dai: string
   };
   logo: string;
   favicon: string;

@@ -3,7 +3,9 @@
     "description": "Maker Teleport",
     "palette": {
         "text": "black",
-        "background": "white"
+        "background": "white",
+        "maker": "#1AAB9B",
+        "dai": "#F4B731"
     },
     "logo": "/images/logo.png",
     "favicon": "/images/logo.png"

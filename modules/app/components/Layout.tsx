@@ -21,24 +21,27 @@ export function Layout({
         <link rel="icon" href={config.favicon} />
       </Head>
 
-      <Header/>
-
       <div className="body">
+        <Header/>
+
         <div className="main">{children}</div>
+        <Footer />
       </div>
-      <Footer />
       <style jsx>{`
         .body {
           min-height: 100vh;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
           padding: 0;
           max-width: 100%;
           margin: 0 auto;
         }
 
         .main {
-            max-width: 1400px;
-            padding: 30px;
-            margin: 0 auto;
+          max-width: 1400px;
+          padding: 30px;
+          margin: 0 auto;
         }
       `}</style>
     </React.Fragment>

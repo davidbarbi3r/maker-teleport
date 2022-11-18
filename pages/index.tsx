@@ -1,6 +1,7 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
+import Bridger from "../modules/app/components/Bridger";
 import { Layout } from "../modules/app/components/Layout";
 
 export default function Home() {
@@ -21,7 +22,7 @@ export default function Home() {
       {show && (
         <div className="connection">
           {!address && (
-            <div>
+            <div className="container">
               <p>
                 Please, connect your wallet to continue. Supported networks:
                 Arbitrum, Optimism, Ethereum Mainnet.{" "}
@@ -30,12 +31,20 @@ export default function Home() {
             </div>
           )}
           {address && <p>Your address {address}</p>}
+          <Bridger/>
         </div>
       )}
+
 
       <style jsx>{`
         .title {
           text-align: center;
+        }
+
+        .container {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
         }
       `}</style>
     </Layout>

@@ -6,7 +6,8 @@ import NextNprogress from "nextjs-progressbar";
 
 import { WagmiConfig } from "wagmi";
 import { chains, wagmiClient } from "../modules/providers/wagmi";
-import { darkTheme, RainbowKitProvider } from "@rainbow-me/rainbowkit";
+import { lightTheme, darkTheme, RainbowKitProvider } from "@rainbow-me/rainbowkit";
+import config from "../modules/config";
 
 function App({ Component, pageProps }: AppProps) {
   return (
@@ -24,18 +25,18 @@ function App({ Component, pageProps }: AppProps) {
       <style jsx global>{`
         :root {
           --gap: 16pt;
-          --black-background: #1a1b1f;
-          --page-background-color: #1a1b1f;
+          --black-background: ${config.palette.background};
+          --page-background-color: ${config.palette.background};
           --alt-background-color: grey;
-          --text-main-color: white;
+          --text-main-color: ${config.palette.text};
           --text-secondary-color: grey;
           --alt-text-main-color: green;
           --alt-text-secondary-color: grey;
 
           --z-index-modal: 1000;
           --z-index-header: 100;
-          --accents-1: #f9fafc;
-          --accents-2: #eaeaea;
+          --accents-1: ${config.palette.maker};
+          --accents-2: ${config.palette.dai};
           --accents-3: #999;
           --accents-4: #888;
           --accents-5: #666;
@@ -70,11 +71,11 @@ function App({ Component, pageProps }: AppProps) {
           width: 8px;
         }
         ::-webkit-scrollbar-track {
-          background: #252525;
+          background: ${config.palette.dai};
           border-radius: 24px;
         }
         ::-webkit-scrollbar-thumb {
-          background: gold;
+          background: ${config.palette.dai};
           border-radius: 24px;
         }
 
@@ -119,11 +120,14 @@ function App({ Component, pageProps }: AppProps) {
     </div>
   );
 }
-export default function AppWrapper(props) {
+export default function AppWrapper(props: any) {
   return (
     <div>
       <WagmiConfig client={wagmiClient}>
-        <RainbowKitProvider chains={chains} theme={darkTheme()}>
+        <RainbowKitProvider chains={chains} theme={lightTheme({
+          accentColor: config.palette.maker,
+          overlayBlur: 'small'
+        })}>
           <App {...props} />
         </RainbowKitProvider>
       </WagmiConfig>
