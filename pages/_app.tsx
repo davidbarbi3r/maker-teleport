@@ -8,6 +8,7 @@ import { WagmiConfig } from "wagmi";
 import { chains, wagmiClient } from "../modules/providers/wagmi";
 import { lightTheme, darkTheme, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import config from "../modules/config";
+import { DaiBalanceContextProvider } from "../modules/hooks/balanceContext"
 
 function App({ Component, pageProps }: AppProps) {
   return (
@@ -142,7 +143,9 @@ export default function AppWrapper(props: any) {
           accentColor: config.palette.maker,
           overlayBlur: 'small'
         })}>
-          <App {...props} />
+          <DaiBalanceContextProvider>
+            <App {...props} />
+          </DaiBalanceContextProvider>
         </RainbowKitProvider>
       </WagmiConfig>
     </div>

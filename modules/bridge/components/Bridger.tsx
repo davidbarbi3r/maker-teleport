@@ -1,11 +1,12 @@
 import { BigNumber } from "ethers";
 import { formatUnits, parseUnits } from "ethers/lib/utils.js";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import StdButton from "../../app/components/StdButton";
 import config from "../../config";
 import { chains } from "../../providers/wagmi";
 import BridgeNetworkSelector from "./BridgeNetworkSelector";
 import DaiBalance from "./DaiBalance";
+import { DaiBalanceContext } from "../../hooks/balanceContext"
 
 type Props = {};
 
@@ -16,6 +17,9 @@ function Bridger({}: Props) {
   // Handle the origin and destiny networks
   const [origin, setOrigin] = useState(chains[0]);
   const [destiny, setDestiny] = useState(chains[1]);
+
+  // DAI balance on all supported chains
+  const { balance } = useContext(DaiBalanceContext)
 
   return (
     <div className="bridger-container">
@@ -40,6 +44,17 @@ function Bridger({}: Props) {
       <BridgeNetworkSelector origin={origin} destiny={destiny} onChangeOrigin={setOrigin} onChangeDestiny={setDestiny} />
 
       <StdButton text="Bridge" click/>
+
+      <div>
+        Your DAI balance on all chains : 
+        <ul>
+          <li>Mainet : {formatUnits(balance.mainnet)}</li>
+          <li>Goerli : {formatUnits(balance.goerli)}</li>
+          <li>Optimism : {formatUnits(balance.optimism)}</li>
+          <li>Arbitrum : {formatUnits(balance.arbitrum)}</li>
+        </ul>
+      </div>
+
       <style jsx>{`
         .bridger-container {
           display: flex;
