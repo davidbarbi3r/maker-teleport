@@ -19,10 +19,12 @@ export function Header() {
           </div>
           <div className="right">
             <div className="login-box">
-              <ConnectButton  accountStatus={{
-                smallScreen: 'avatar',
-                largeScreen: 'full',
-              }}/>
+              <ConnectButton
+                accountStatus={{
+                  smallScreen: "avatar",
+                  largeScreen: "full",
+                }}
+              />
             </div>
           </div>
         </div>

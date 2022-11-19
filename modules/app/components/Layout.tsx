@@ -17,12 +17,15 @@ export function Layout({
         <title>
           {config.name} | {metaDescription || config.description}
         </title>
-        <meta name="description" content={metaDescription || config.description } />
+        <meta
+          name="description"
+          content={metaDescription || config.description}
+        />
         <link rel="icon" href={config.favicon} />
       </Head>
 
       <div className="body">
-        <Header/>
+        <Header />
 
         <div className="main">{children}</div>
         <Footer />

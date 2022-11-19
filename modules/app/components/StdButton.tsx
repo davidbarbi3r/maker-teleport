@@ -1,16 +1,17 @@
-import React from 'react'
-import config from '../../config'
+import React from "react";
+import config from "../../config";
 
 type Props = {
-    text: string;
-    click: any;
-}
+  text: string;
+  click: any;
+};
 
-function StdButton({text, click}: Props) {
+function StdButton({ text, click }: Props) {
   return (
     <>
-        <button className="std-btn">{text}</button>
-        <style jsx>{`
+      <button className="std-btn">{text}</button>
+      <style jsx>
+        {`
             .std-btn {
             border: 1px solid rgba(183, 168, 168, 0.35);
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
@@ -30,11 +31,10 @@ function StdButton({text, click}: Props) {
             }
 
             .std-btn:active {
-            transform: scale(0.95);`
-        }
-        </style>
+            transform: scale(0.95);`}
+      </style>
     </>
-  )
+  );
 }
 
-export default StdButton
+export default StdButton;
