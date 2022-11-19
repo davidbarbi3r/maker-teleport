@@ -30,13 +30,14 @@ export function Footer() {
             justify-content: center;
             align-items: center;
             flex-grow: 1;
-            color: white;
+            color: ${config.palette.text};
             text-transform: uppercase;
             text-decoration: underline;
           }
 
           .link {
             padding: 30px;
+            color: ${config.palette.text};
           }
         `}
       </style>
