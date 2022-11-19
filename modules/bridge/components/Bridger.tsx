@@ -1,6 +1,8 @@
 import { BigNumber } from "ethers";
 import { formatUnits, parseUnits } from "ethers/lib/utils.js";
 import React, { useState } from "react";
+import StdButton from "../../app/components/StdButton";
+import config from "../../config";
 import { chains } from "../../providers/wagmi";
 import BridgeNetworkSelector from "./BridgeNetworkSelector";
 import DaiBalance from "./DaiBalance";
@@ -37,16 +39,20 @@ function Bridger({}: Props) {
      
       <BridgeNetworkSelector origin={origin} destiny={destiny} onChangeOrigin={setOrigin} onChangeDestiny={setDestiny} />
 
-      <button>Bridge</button>
+      <StdButton text="Bridge" click/>
       <style jsx>{`
         .bridger-container {
           display: flex;
           flex-direction: column;
           align-items: center;
-          border: 1px solid;
-          box-shadow: 7px 8px 13px rgb(0 0 0 / 30%);
-          border-radius: 4px;
-          padding: 15px;
+          background: rgba(183, 168, 168, 0.18);
+          border-radius: 16px;
+          box-shadow: 5px 4px 10px rgba(0, 0, 0, 0.15);
+          backdrop-filter: blur(3.2px);
+          -webkit-backdrop-filter: blur(3.2px);
+          border: 1px solid rgba(183, 168, 168, 0.35);
+          padding: 2em;
+          margin: 1em;
         }
 
         .selector {
@@ -60,6 +66,7 @@ function Bridger({}: Props) {
         .balance {
           margin: 15px;
         }
+
       `}</style>
     </div>
   );
