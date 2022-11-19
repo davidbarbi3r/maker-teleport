@@ -1,7 +1,7 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
-import Bridger from "../modules/app/components/Bridger";
+import Bridger from "../modules/bridge/components/Bridger";
 import { Layout } from "../modules/app/components/Layout";
 
 export default function Home() {

@@ -27,10 +27,11 @@ function App({ Component, pageProps }: AppProps) {
           --gap: 16pt;
           --black-background: ${config.palette.background};
           --page-background-color: ${config.palette.background};
+          --primary: #1AAB9B;
           --alt-background-color: grey;
           --text-main-color: ${config.palette.text};
           --text-secondary-color: grey;
-          --alt-text-main-color: green;
+          --alt-text-main-color: var(--primary);
           --alt-text-secondary-color: grey;
 
           --z-index-modal: 1000;
@@ -101,12 +102,25 @@ function App({ Component, pageProps }: AppProps) {
 
         input {
           padding: 15px;
-          border: none;
+          border: 1px solid;
+          border-color: var(--primary);
+          border-radius: 4px;
         }
 
         select {
           padding: 15px;
+          border: 1px solid;
+          border-color: var(--primary);
+          border-radius: 4px;
+        }
+
+        button {
+          background: var(--primary);
+          color: white;
+          padding: 15px;
           border: none;
+          border-radius: 4px;
+          font-weight: 500;
         }
 
         img {
