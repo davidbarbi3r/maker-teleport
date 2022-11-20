@@ -15,9 +15,9 @@ export default function DaiBalance({
   const provider = useProvider();
 
   const contractMainnet = new ethers.Contract(contracts.mainnet.dai, mainnetAbi, provider);
-  const contractGoerli = new ethers.Contract(contracts.goerli.dai, mainnetAbi, provider);
+  // const contractGoerli = new ethers.Contract(contracts.goerli.dai, mainnetAbi, provider);
   const contractOptimism = new ethers.Contract(contracts.optimism.dai, mainnetAbi, provider);
-  const contractArbitrum = new ethers.Contract(contracts.arbitrum.dai, mainnetAbi, provider);
+  const contractArbitrum = new ethers.Contract(contracts.arbitrumOne.dai, mainnetAbi, provider);
 
   const { address } = useAccount();
   const { balance, setBalance } = useContext(DaiBalanceContext)
@@ -25,12 +25,12 @@ export default function DaiBalance({
   useEffect(() => {
     const fetch = async () => {
       const respMainnet = await contractMainnet.balanceOf(address);
-      const respGoerli = await contractGoerli.balanceOf(address);
+      // const respGoerli = await contractGoerli.balanceOf(address);
       const respOptimism = await contractOptimism.balanceOf(address);
       const respArbitrum = await contractArbitrum.balanceOf(address);
       setBalance({
         mainnet: respMainnet,
-        goerli: respGoerli,
+        goerli: BigNumber.from(0),
         optimism: respOptimism,
         arbitrum: respArbitrum
       });
