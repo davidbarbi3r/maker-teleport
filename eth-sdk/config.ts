@@ -3,15 +3,15 @@ export const contracts = {
   mainnet: {
     dai: "0x6b175474e89094c44da98b954eedeac495271d0f",
   },
-  goerli: {
-    dai: "0xdc31Ee1784292379Fbb2964b3B9C4124D8F89C60",
-  },
   optimism: {
     dai: "0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1"
   },
-  arbitrum: {
+  arbitrumOne: {
     dai: "0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1"
-  }
+  },
+  goerli: {
+    dai: "0xdc31Ee1784292379Fbb2964b3B9C4124D8F89C60",
+  },
 };
 export default defineConfig({
   contracts,
