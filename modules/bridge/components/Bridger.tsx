@@ -6,11 +6,14 @@ import config from "../../config";
 import { chains } from "../../providers/wagmi";
 import BridgeNetworkSelector from "./BridgeNetworkSelector";
 import DaiBalance from "./DaiBalance";
-import { DaiBalanceContext } from "../../hooks/balanceContext"
+import { DaiBalanceContext } from "../../hooks/balanceContext";
+import { useAccount } from "wagmi";
 
 type Props = {};
 
 function Bridger({}: Props) {
+  const { address } = useAccount();
+
   // Amount that the user will bridge
   const [selectedAmount, setSelectedAmount] = useState(BigNumber.from(0));
 
@@ -19,7 +22,7 @@ function Bridger({}: Props) {
   const [destiny, setDestiny] = useState(chains[1]);
 
   // DAI balance on all supported chains
-  const { balance } = useContext(DaiBalanceContext)
+  const { balance } = useContext(DaiBalanceContext);
 
   return (
     <div className="bridger-container">
@@ -40,20 +43,27 @@ function Bridger({}: Props) {
         You are going to bridge {formatUnits(selectedAmount)} DAI from{" "}
         {origin.name} to {destiny.name}.
       </div>
-     
-      <BridgeNetworkSelector origin={origin} destiny={destiny} onChangeOrigin={setOrigin} onChangeDestiny={setDestiny} />
 
-      <StdButton text="Bridge" click/>
+      <BridgeNetworkSelector
+        origin={origin}
+        destiny={destiny}
+        onChangeOrigin={setOrigin}
+        onChangeDestiny={setDestiny}
+      />
 
-      <div>
-        Your DAI balance on all chains : 
-        <ul>
-          <li>Mainet : {formatUnits(balance.mainnet)}</li>
-          <li>Goerli : {formatUnits(balance.goerli)}</li>
-          <li>Optimism : {formatUnits(balance.optimism)}</li>
-          <li>Arbitrum : {formatUnits(balance.arbitrum)}</li>
-        </ul>
-      </div>
+      <StdButton text="Bridge" click />
+
+      {address && (
+        <div>
+          Your DAI balance on all chains :
+          <ul>
+            <li>Mainet : {formatUnits(balance.mainnet)}</li>
+            <li>Goerli : {formatUnits(balance.goerli)}</li>
+            <li>Optimism : {formatUnits(balance.optimism)}</li>
+            <li>Arbitrum : {formatUnits(balance.arbitrum)}</li>
+          </ul>
+        </div>
+      )}
 
       <style jsx>{`
         .bridger-container {
@@ -81,7 +91,6 @@ function Bridger({}: Props) {
         .balance {
           margin: 15px;
         }
-
       `}</style>
     </div>
   );
