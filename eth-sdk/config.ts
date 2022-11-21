@@ -4,7 +4,7 @@ export const contracts = {
     dai: "0x6b175474e89094c44da98b954eedeac495271d0f",
   },
   optimism: {
-    dai: "0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1"
+    dai: "0xda10009cbd5d07dd0cecc66161fc93d7c9000da1"
   },
   arbitrumOne: {
     dai: "0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1"

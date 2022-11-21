@@ -8,7 +8,7 @@ import { WagmiConfig } from "wagmi";
 import { chains, wagmiClient } from "../modules/providers/wagmi";
 import { lightTheme, darkTheme, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import config from "../modules/config";
-import { DaiBalanceContextProvider } from "../modules/hooks/balanceContext"
+import { DaiBalanceContextProvider } from "../modules/bridge/context/BalanceContext"
 
 function App({ Component, pageProps }: AppProps) {
   return (

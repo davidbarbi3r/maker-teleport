@@ -6,7 +6,7 @@ import config from "../../config";
 import { chains } from "../../providers/wagmi";
 import BridgeNetworkSelector from "./BridgeNetworkSelector";
 import DaiBalance from "./DaiBalance";
-import { DaiBalanceContext } from "../../hooks/balanceContext";
+import { DaiBalanceContext } from "../context/BalanceContext";
 import { useAccount } from "wagmi";
 
 type Props = {};
