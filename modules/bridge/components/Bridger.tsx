@@ -8,19 +8,23 @@ import BridgeNetworkSelector from "./BridgeNetworkSelector";
 import DaiBalance from "./DaiBalance";
 import { DaiBalanceContext } from "../context/BalanceContext";
 import { useAccount } from "wagmi";
+import { TeleportBridge } from "../../../xdomain/packages/teleport-sdk/src/bridge";
 
 type Props = {};
 
 function Bridger({}: Props) {
   const { address } = useAccount();
-
+  
   // Amount that the user will bridge
   const [selectedAmount, setSelectedAmount] = useState(BigNumber.from(0));
-
+  
   // Handle the origin and destiny networks
   const [origin, setOrigin] = useState(chains[0]);
   const [destiny, setDestiny] = useState(chains[1]);
 
+  // Instancing the teleport bridge
+  const teleport = new TeleportBridge({srcDomain: "ETH-GOER-A", dstDomain: "ARB-GOER-A"})
+  
   // DAI balance on all supported chains
   const { balance } = useContext(DaiBalanceContext);
 
@@ -51,7 +55,7 @@ function Bridger({}: Props) {
         onChangeDestiny={setDestiny}
       />
 
-      <StdButton text="Bridge" click />
+      {/* <StdButton text="Bridge" click={() => teleport.approveSrcGateway(address, selectedAmount)} /> */}
 
       {address && (
         <div>

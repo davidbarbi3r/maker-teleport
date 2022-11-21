@@ -9,7 +9,7 @@ type Props = {
 function StdButton({ text, click }: Props) {
   return (
     <>
-      <button className="std-btn">{text}</button>
+      <button className="std-btn" onClick={() => click()}>{text}</button>
       <style jsx>
         {`
             .std-btn {
