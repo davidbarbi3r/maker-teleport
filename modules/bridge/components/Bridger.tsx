@@ -8,7 +8,7 @@ import BridgeNetworkSelector from "./BridgeNetworkSelector";
 import DaiBalance from "./DaiBalance";
 import { DaiBalanceContext } from "../context/BalanceContext";
 import { useAccount } from "wagmi";
-import { TeleportBridge } from "../../../xdomain/packages/teleport-sdk/src/bridge";
+
 
 type Props = {};
 
@@ -22,9 +22,17 @@ function Bridger({}: Props) {
   const [origin, setOrigin] = useState(chains[0]);
   const [destiny, setDestiny] = useState(chains[1]);
 
+  function isSupported(originId: number, destinyId: number): Boolean {
+    if ((originId === 10 || originId === 42161) && (destinyId === 10 || destinyId === 42161)){
+      return false
+    } else {
+      return true
+    } 
+  }
+
   // Instancing the teleport bridge
-  const teleport = new TeleportBridge({srcDomain: "ETH-GOER-A", dstDomain: "ARB-GOER-A"})
-  
+  // const test = demo(origin.network, "https://optimistic.etherscan.io/tx/", "https://etherscan.io/tx/", selectedAmount, undefined).catch(console.error)
+
   // DAI balance on all supported chains
   const { balance } = useContext(DaiBalanceContext);
 
@@ -33,7 +41,7 @@ function Bridger({}: Props) {
       <h2>Teleport DAI!</h2>
       <div className="selector">
         <div className="balance">
-          <DaiBalance onSelectBalance={setSelectedAmount} />
+          <DaiBalance onSelectBalance={setSelectedAmount}/>
         </div>
         <div className="input">
           <input
@@ -55,7 +63,9 @@ function Bridger({}: Props) {
         onChangeDestiny={setDestiny}
       />
 
-      {/* <StdButton text="Bridge" click={() => teleport.approveSrcGateway(address, selectedAmount)} /> */}
+      <StdButton text="Bridge" click disabled={!isSupported(origin.id, destiny.id)}/>
+
+      {isSupported(origin.id, destiny.id) ? "" : <p>🚧 L2 to L2 bridge are not yet supported 🚧</p>}
 
       {address && (
         <div>

@@ -4,12 +4,13 @@ import config from "../../config";
 type Props = {
   text: string;
   click: any;
+  disabled: boolean
 };
 
-function StdButton({ text, click }: Props) {
+function StdButton({ text, click, disabled }: Props) {
   return (
     <>
-      <button className="std-btn" onClick={() => click()}>{text}</button>
+      <button className="std-btn" onClick={() => click()} disabled={disabled}>{text}</button>
       <style jsx>
         {`
             .std-btn {
