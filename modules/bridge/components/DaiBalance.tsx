@@ -1,5 +1,5 @@
 import { BigNumber, ethers } from "ethers";
-import { useAccount, useProvider } from "wagmi";
+import { Chain, useAccount, useNetwork, useProvider } from "wagmi";
 import { contracts } from "../../../eth-sdk/config";
 
 import { useContext, useEffect } from "react";
@@ -12,13 +12,36 @@ export default function DaiBalance({
   onSelectBalance: (val: BigNumber) => void;
 }): React.ReactElement {
   const { balance } = useContext(DaiBalanceContext);
+  const { chain } = useNetwork();
+
+  const daiBalOnCurrentChain = (
+    chain:
+      | (Chain & {
+          unsupported?: boolean | undefined;
+        })
+      | undefined
+  ) => {
+    switch (chain?.name) {
+      case "Ethereum":
+        return balance.mainnet;
+      case "Goerli":
+        return balance.goerli;
+      case "Optimism":
+        return balance.optimism;
+      case "Arbitrum One":
+        return balance.arbitrum;
+      default:
+        return BigNumber.from(0);
+    }
+  };
+
+  let currentChainBalance: BigNumber = daiBalOnCurrentChain(chain);
 
   return (
     <div>
-      {/* Have to display the current chain balance  */}
-      <div onClick={() => onSelectBalance(balance.mainnet)}>
+      <div onClick={() => onSelectBalance(currentChainBalance)}>
         <div className="title">Your DAI balance:</div>
-        <div className="amount">{formatUnits(balance.mainnet)}</div>
+        <div className="amount">{formatUnits(currentChainBalance)}</div>
       </div>
 
       <style jsx>{`
