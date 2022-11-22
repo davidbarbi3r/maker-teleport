@@ -7,13 +7,14 @@ import { chains } from "../../providers/wagmi";
 import BridgeNetworkSelector from "./BridgeNetworkSelector";
 import DaiBalance from "./DaiBalance";
 import { DaiBalanceContext } from "../context/BalanceContext";
-import { useAccount } from "wagmi";
-
+import { useAccount, useProvider } from "wagmi";
+import { TeleportBridge } from 'teleport-sdk'
 
 type Props = {};
 
 function Bridger({}: Props) {
   const { address } = useAccount();
+  const provider = useProvider()
   
   // Amount that the user will bridge
   const [selectedAmount, setSelectedAmount] = useState(BigNumber.from(0));
@@ -31,7 +32,10 @@ function Bridger({}: Props) {
   }
 
   // Instancing the teleport bridge
-  // const test = demo(origin.network, "https://optimistic.etherscan.io/tx/", "https://etherscan.io/tx/", selectedAmount, undefined).catch(console.error)
+  const bridge = new TeleportBridge({
+    srcDomain: "arbitrum",
+    srcDomainProvider: provider
+  })
 
   // DAI balance on all supported chains
   const { balance } = useContext(DaiBalanceContext);
