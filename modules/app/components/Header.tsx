@@ -42,7 +42,6 @@ export function Header() {
             align-items: center;
             text-align: center;
             flex-wrap: wrap;
-            background: var(--black-background);
             padding: 5px;
           }
 

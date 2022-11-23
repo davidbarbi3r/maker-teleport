@@ -1,6 +1,6 @@
 import { BigNumber, ethers } from "ethers";
 import React, { useState, createContext, useEffect } from "react";
-import { useAccount } from "wagmi";
+import { Chain, useAccount } from "wagmi";
 import { contracts } from "../../../eth-sdk/config";
 import IDaiBalance from "../types/IDaiBalance";
 import mainnetAbi from "../../../eth-sdk/abis/mainnet/dai.json";
@@ -10,6 +10,7 @@ import arbitrumAbi from "../../../eth-sdk/abis/arbitrumOne/dai.json";
 import useSWR from "swr";
 interface IBalanceContext {
   balance: IDaiBalance;
+  balanceOfChain: (chain: Chain) => BigNumber
   refresh: () => void;
   error: any;
 }
@@ -73,8 +74,31 @@ const DaiBalanceContextProvider = (props: ContextProviderProps) => {
         optimism: BigNumber.from(0),
         arbitrum: BigNumber.from(0),
       };
+
+  // returns the balance for a given chain
+  const balanceOfChain = (
+    chain:
+      | (Chain & {
+          unsupported?: boolean | undefined;
+        })
+      | undefined
+  ) => {
+    switch (chain?.name) {
+      case "Ethereum":
+        return balance.mainnet;
+      case "Goerli":
+        return balance.goerli;
+      case "Optimism":
+        return balance.optimism;
+      case "Arbitrum One":
+        return balance.arbitrum;
+      default:
+        return BigNumber.from(0);
+    }
+  }
+
   return (
-    <DaiBalanceContext.Provider value={{ balance, refresh: mutate, error }}>
+    <DaiBalanceContext.Provider value={{ balance, balanceOfChain, refresh: mutate, error }}>
       {props.children}
     </DaiBalanceContext.Provider>
   );

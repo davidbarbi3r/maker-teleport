@@ -66,11 +66,19 @@ export default function BridgeNetworkSelector({
       <style jsx>{`
         .container {
           display: flex;
+          justify-content: space-between;
+          text-align: center;
+        }
+
+        select {
+          width: 100%;
         }
 
         .origin,
         .destiny {
-          padding: 15px;
+          padding-left: 15px;
+          padding-right: 15px;
+          width: 50%;
         }
       `}</style>
     </div>

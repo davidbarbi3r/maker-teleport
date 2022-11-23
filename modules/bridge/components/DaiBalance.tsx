@@ -5,52 +5,69 @@ import { contracts } from "../../../eth-sdk/config";
 import { useContext, useEffect } from "react";
 import { formatUnits } from "ethers/lib/utils.js";
 import { DaiBalanceContext } from "../context/BalanceContext";
+import Button from "../../app/components/Button";
 
 export default function DaiBalance({
+  chain,
   onSelectBalance,
 }: {
+  chain: Chain;
   onSelectBalance: (val: BigNumber) => void;
 }): React.ReactElement {
-  const { balance } = useContext(DaiBalanceContext);
-  const { chain } = useNetwork();
+  const { balanceOfChain } = useContext(DaiBalanceContext);
 
-  const daiBalOnCurrentChain = (
-    chain:
-      | (Chain & {
-          unsupported?: boolean | undefined;
-        })
-      | undefined
-  ) => {
-    switch (chain?.name) {
-      case "Ethereum":
-        return balance.mainnet;
-      case "Goerli":
-        return balance.goerli;
-      case "Optimism":
-        return balance.optimism;
-      case "Arbitrum One":
-        return balance.arbitrum;
-      default:
-        return BigNumber.from(0);
-    }
-  };
-
-  let currentChainBalance: BigNumber = daiBalOnCurrentChain(chain);
+  let currentChainBalance: BigNumber = balanceOfChain(chain);
 
   return (
     <div>
-      <div onClick={() => onSelectBalance(currentChainBalance)}>
-        <div className="title">Your DAI balance:</div>
-        <div className="amount">{formatUnits(currentChainBalance)}</div>
+      <div onClick={() => onSelectBalance(currentChainBalance)}></div>
+
+      <div className="wrapper">
+        <div className="content">
+          <div className="text">
+            <div className="title">DAI balance</div>
+            <div className="network">{chain.name}</div>
+          </div>
+          <div className="amount">{formatUnits(currentChainBalance)}</div>
+        </div>
+        <div className="action">
+          <Button
+            secondary
+            onClick={() => onSelectBalance(currentChainBalance)}
+          >
+            Max
+          </Button>
+        </div>
       </div>
 
       <style jsx>{`
-        .title {
-          font-weight: bold;
+        .wrapper {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
         }
 
-        .amount {
-          cursor: pointer;
+        .action {
+          margin-left: 15px;
+        }
+
+        .content {
+          display: flex;
+          align-items: flex-end;
+          justify-content: center;
+        }
+
+        .text {
+          margin-right: 15px;
+        }
+
+        .title {
+          font-weight: bold;
+          margin-bottom: -5px;
+        }
+
+        .network {
+          font-size: 13px;
         }
       `}</style>
     </div>

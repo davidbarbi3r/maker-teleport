@@ -28,23 +28,14 @@ function App({ Component, pageProps }: AppProps) {
           --gap: 16pt;
           --black-background: ${config.palette.background};
           --page-background-color: ${config.palette.background};
-          --primary: #1AAB9B;
+          --primary: ${config.palette.maker};
+          --secondary: #c793c0;
+          --alt-secondary: #65215c;
           --alt-background-color: grey;
           --text-main-color: ${config.palette.text};
           --text-secondary-color: grey;
           --alt-text-main-color: var(--primary);
           --alt-text-secondary-color: grey;
-
-          --z-index-modal: 1000;
-          --z-index-header: 100;
-          --accents-1: ${config.palette.maker};
-          --accents-2: ${config.palette.dai};
-          --accents-3: #999;
-          --accents-4: #888;
-          --accents-5: #666;
-          --accents-6: #444;
-          --accents-7: #333;
-          --accents-8: #111;
         }
 
         * {
@@ -52,12 +43,19 @@ function App({ Component, pageProps }: AppProps) {
         }
 
         @font-face {
-          font-family: "Roboto-Medium";
-          src: url("/fonts/Roboto-Medium.ttf");
+          font-family: "FT Polar Trial";
+          src: url("/fonts/FTPolarTrial-Medium.woff2");
+          font-weight: normal;
+        }
+
+        @font-face {
+          font-family: "FT Polar Trial";
+          src: url("/fonts/FTPolarTrial-Bold.woff2");
+          font-weight: bold;
         }
 
         body {
-          font-family: "Roboto-Medium";
+          font-family: "FT Polar Trial", "Helvetica Neue", sans-serif;
           padding: 0;
           margin: 0;
           margin: 0;
@@ -119,8 +117,9 @@ function App({ Component, pageProps }: AppProps) {
           background: var(--primary);
           color: white;
           padding: 15px;
+          font-weight: bold;
           border: none;
-          border-radius: 4px;
+          border-radius: 15px;
           font-weight: 500;
         }
 
