@@ -6,6 +6,7 @@ import { useContext, useEffect } from "react";
 import { formatUnits } from "ethers/lib/utils.js";
 import { DaiBalanceContext } from "../context/BalanceContext";
 import Button from "../../app/components/Button";
+import { formatDai } from "../utils/formatUnits";
 
 export default function DaiBalance({
   chain,
@@ -28,7 +29,7 @@ export default function DaiBalance({
             <div className="title">DAI balance</div>
             <div className="network">{chain.name}</div>
           </div>
-          <div className="amount">{formatUnits(currentChainBalance)}</div>
+          <div className="amount">{formatDai(currentChainBalance)}</div>
         </div>
         <div className="action">
           <Button

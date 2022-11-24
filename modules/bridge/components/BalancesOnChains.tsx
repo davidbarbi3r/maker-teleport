@@ -2,6 +2,7 @@ import { formatUnits } from "ethers/lib/utils.js";
 import { useContext } from "react";
 import { useAccount } from "wagmi";
 import { DaiBalanceContext } from "../context/BalanceContext";
+import { formatDai } from "../utils/formatUnits";
 
 export default function BalancesOnChains() {
   const { address } = useAccount();
@@ -14,19 +15,19 @@ export default function BalancesOnChains() {
           <div className="networks">
             <div className="network">
               <div className="network-title">Mainet</div>{" "}
-              <div className="balance">{formatUnits(balance.mainnet)} DAI</div>
+              <div className="balance">{formatDai(balance.mainnet)} DAI</div>
             </div>
             <div className="network">
               <div className="network-title">Goerli</div>{" "}
-              <div className="balance">{formatUnits(balance.goerli)} DAI</div>
+              <div className="balance">{formatDai(balance.goerli)} DAI</div>
             </div>
             <div className="network">
               <div className="network-title">Optimism</div>{" "}
-              <div className="balance">{formatUnits(balance.optimism)} DAI</div>
+              <div className="balance">{formatDai(balance.optimism)} DAI</div>
             </div>
             <div className="network">
               <div className="network-title">Arbitrum</div>{" "}
-              <div className="balance">{formatUnits(balance.arbitrum)} DAI</div>
+              <div className="balance">{formatDai(balance.arbitrum)} DAI</div>
             </div>
           </div>
 

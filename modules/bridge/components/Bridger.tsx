@@ -83,7 +83,7 @@ function Bridger({}: Props) {
                 {origin.name} to {destiny.name}.
               </div>
 
-              <Button click disabled={!isSupported(origin.id, destiny.id)}>
+              <Button disabled={!isSupported(origin.id, destiny.id)}>
                 Bridge
               </Button>
             </div>
