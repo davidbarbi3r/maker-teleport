@@ -74,7 +74,7 @@ function Bridger({}: Props) {
         <div>Select how much DAI you want to bridge first.</div>
       )}
 
-      {selectedAmount.gt(0) && (
+      {selectedAmount.gt(0) && isSupported(origin.id, destiny.id) && (
         <div>
           {hasSufficientBalance && (
             <div>
@@ -93,9 +93,7 @@ function Bridger({}: Props) {
         </div>
       )}
 
-      {isSupported(origin.id, destiny.id) ? (
-        ""
-      ) : (
+      {!isSupported(origin.id, destiny.id) && (
         <p>🚧 L2 to L2 bridge are not yet supported 🚧</p>
       )}
 
