@@ -9,7 +9,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import useSWR from "swr";
+import { IUserData } from "../modules/transfert/types/IUserData";
 
 type Props = {};
 
@@ -17,14 +17,17 @@ export default function Transfers({}: Props) {
   const { address } = useAccount();
 
   const [show, setShow] = useState(false);
-  // Prevent server-side problem with different UI
-
-  let rows;
-
-  useEffect(() => {
-    setShow(true);
-  }, []);
-
+  const [data, setData] = useState<IUserData[]>([
+    {
+      amount: "1",
+      origin: "",
+      destiny: "",
+      feesPaid: "0",
+      feesOtherBridge: "0",
+      amountSaved: "0",
+      date: Date.now(),
+    },
+  ]);
   const userData = (
     amount: string,
     origin: string,
@@ -45,7 +48,14 @@ export default function Transfers({}: Props) {
     };
   };
 
-  rows = [userData("1", "optimism", "mainnet", "0.01", "0.03", "0.02")];
+  // Prevent server-side problem with different UI
+  useEffect(() => {
+    setShow(true);
+    setData((prev) => [
+      ...prev,
+      userData("1", "optimism", "mainnet", "0.01", "0.03", "0.02"),
+    ]);
+  }, []);
 
   return (
     <Layout>
@@ -78,7 +88,7 @@ export default function Transfers({}: Props) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((row) => (
+              {data.map((row) => (
                 <TableRow
                   key={row.date}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
