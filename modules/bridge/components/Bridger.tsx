@@ -54,7 +54,7 @@ function Bridger({}: Props) {
         onChangeDestiny={setDestiny}
       />
 
-      <h3>1. Select DAI amount</h3>
+      <h3>2. Select DAI amount</h3>
       <div className="selector">
         <div className="balance">
           <DaiBalance chain={origin} onSelectBalance={setSelectedAmount} />
@@ -102,6 +102,8 @@ function Bridger({}: Props) {
       <style jsx>{`
         .bridger-container {
           background: rgba(183, 168, 168, 0.18);
+          width: 100%;
+          max-width: 1000px;
           border-radius: 16px;
           box-shadow: 5px 4px 10px rgba(0, 0, 0, 0.15);
           backdrop-filter: blur(3.2px);
