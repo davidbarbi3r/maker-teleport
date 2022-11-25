@@ -8,6 +8,7 @@ import BridgeNetworkSelector from "./BridgeNetworkSelector";
 import DaiBalance from "./DaiBalance";
 import { DaiBalanceContext } from "../context/BalanceContext";
 import { useAccount, useProvider } from "wagmi";
+import { TeleportBridge } from "teleport-sdk";
 
 type Props = {};
 
@@ -34,10 +35,10 @@ function Bridger({}: Props) {
   }
 
   // Instancing the teleport bridge
-  // const bridge = new TeleportBridge({
-  //   srcDomain: "arbitrum",
-  //   srcDomainProvider: provider
-  // })
+  const bridge = new TeleportBridge({
+    srcDomain: "arbitrum",
+    srcDomainProvider: provider
+  })
 
   // DAI balance on all supported chains
   const { balance, balanceOfChain } = useContext(DaiBalanceContext);

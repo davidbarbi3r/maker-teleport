@@ -23,7 +23,7 @@
     "react-toastify": "^9.1.1",
     "styled-jsx": "^5.1.0",
     "swr": "^1.3.0",
-    "teleport-sdk": "^1.0.0",
+    "teleport-sdk": "^0.0.1",
     "typescript": "4.9.3",
     "wagmi": "^0.8.5"
   },

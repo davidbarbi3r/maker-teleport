@@ -78,7 +78,7 @@ export default function Decoration() {
           height="798"
           x="134"
           y="218.782"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
           filterUnits="userSpaceOnUse"
         >
           <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
@@ -98,7 +98,7 @@ export default function Decoration() {
           height="798"
           x="626.001"
           y="48.782"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
           filterUnits="userSpaceOnUse"
         >
           <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
@@ -118,7 +118,7 @@ export default function Decoration() {
           height="950.739"
           x="76"
           y="70.565"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
           filterUnits="userSpaceOnUse"
         >
           <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
@@ -143,7 +143,7 @@ export default function Decoration() {
           height="772"
           x="-6"
           y="59.783"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
           filterUnits="userSpaceOnUse"
         >
           <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
@@ -168,7 +168,7 @@ export default function Decoration() {
           height="859.31"
           x="-59.563"
           y="-60"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
           filterUnits="userSpaceOnUse"
         >
           <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
