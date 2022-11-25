@@ -55,7 +55,7 @@ function Bridger({}: Props) {
         onChangeDestiny={setDestiny}
       />
 
-      <h3>1. Select DAI amount</h3>
+      <h3>2. Select DAI amount</h3>
       <div className="selector">
         <div className="balance">
           <DaiBalance chain={origin} onSelectBalance={setSelectedAmount} />
@@ -75,7 +75,7 @@ function Bridger({}: Props) {
         <div>Select how much DAI you want to bridge first.</div>
       )}
 
-      {selectedAmount.gt(0) && (
+      {selectedAmount.gt(0) && isSupported(origin.id, destiny.id) && (
         <div>
           {hasSufficientBalance && (
             <div>
@@ -84,7 +84,7 @@ function Bridger({}: Props) {
                 {origin.name} to {destiny.name}.
               </div>
 
-              <Button click disabled={!isSupported(origin.id, destiny.id)}>
+              <Button disabled={!isSupported(origin.id, destiny.id)}>
                 Bridge
               </Button>
             </div>
@@ -94,15 +94,15 @@ function Bridger({}: Props) {
         </div>
       )}
 
-      {isSupported(origin.id, destiny.id) ? (
-        ""
-      ) : (
+      {!isSupported(origin.id, destiny.id) && (
         <p>🚧 L2 to L2 bridge are not yet supported 🚧</p>
       )}
 
       <style jsx>{`
         .bridger-container {
           background: rgba(183, 168, 168, 0.18);
+          width: 100%;
+          max-width: 1000px;
           border-radius: 16px;
           box-shadow: 5px 4px 10px rgba(0, 0, 0, 0.15);
           backdrop-filter: blur(3.2px);
