@@ -1,20 +1,22 @@
 import { BigNumber } from "ethers";
-import { formatUnits, parseUnits } from "ethers/lib/utils.js";
-import React, { useContext, useState } from "react";
+import { parseUnits } from "ethers/lib/utils.js";
+import React, { useContext, useEffect, useState } from "react";
 import Button from "../../app/components/Button";
-import config from "../../config";
 import { chains } from "../../providers/wagmi";
 import BridgeNetworkSelector from "./BridgeNetworkSelector";
 import DaiBalance from "./DaiBalance";
 import { DaiBalanceContext } from "../context/BalanceContext";
-import { useAccount, useProvider } from "wagmi";
-import { TeleportBridge } from "teleport-sdk";
+import { useAccount, useProvider, useSigner } from "wagmi";
+import { DomainDescription, TeleportBridge } from "teleport-sdk";
+import { formatDai } from "../utils/formatDai";
+import Fees from "./Fees";
 
 type Props = {};
 
 function Bridger({}: Props) {
   const { address } = useAccount();
   const provider = useProvider();
+  const {data: signer, isError, isLoading} = useSigner()
 
   // Amount that the user will bridge
   const [selectedAmount, setSelectedAmount] = useState(BigNumber.from(0));
@@ -35,10 +37,19 @@ function Bridger({}: Props) {
   }
 
   // Instancing the teleport bridge
-  const bridge = new TeleportBridge({
-    srcDomain: "arbitrum",
-    srcDomainProvider: provider
+  // let signer: Signer = new ethers.VoidSigner(address, provider)
+  const defaultBridge = new TeleportBridge({
+    srcDomain: "arbitrum"
   })
+  const [bridge, setBridge] = useState<TeleportBridge>(defaultBridge)
+  
+  useEffect(() => {
+    const newBridge = new TeleportBridge({
+      srcDomain: origin.id === 10 || origin.id === 42161 ? origin.network as DomainDescription: "arbitrum",
+      srcDomainProvider: provider
+    })
+    setBridge(newBridge)
+  }, [origin, provider])
 
   // DAI balance on all supported chains
   const { balance, balanceOfChain } = useContext(DaiBalanceContext);
@@ -63,7 +74,7 @@ function Bridger({}: Props) {
         <div className="input">
           <input
             type="number"
-            value={formatUnits(selectedAmount)}
+            value={formatDai(selectedAmount)}
             onChange={(e) => setSelectedAmount(parseUnits(e.target.value))}
           />
         </div>
@@ -80,11 +91,12 @@ function Bridger({}: Props) {
           {hasSufficientBalance && (
             <div>
               <div className="instructions">
-                You are going to bridge {formatUnits(selectedAmount)} DAI from{" "}
+                You are going to bridge {formatDai(selectedAmount)} DAI from{" "}
                 {origin.name} to {destiny.name}.
+                <Fees bridge={bridge} selectedAmount={selectedAmount}/>
               </div>
 
-              <Button disabled={!isSupported(origin.id, destiny.id)}>
+              <Button disabled={!isSupported(origin.id, destiny.id)} onClick={() => bridge.approveSrcGateway(signer? signer : undefined, selectedAmount)}>
                 Bridge
               </Button>
             </div>
