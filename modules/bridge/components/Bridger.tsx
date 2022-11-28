@@ -1,4 +1,4 @@
-import { BigNumber } from "ethers";
+import { BigNumber, Signer } from "ethers";
 import { parseUnits } from "ethers/lib/utils.js";
 import React, { useContext, useEffect, useState } from "react";
 import Button from "../../app/components/Button";
@@ -10,6 +10,7 @@ import { useAccount, useProvider, useSigner } from "wagmi";
 import { DomainDescription, TeleportBridge } from "teleport-sdk";
 import { formatDai } from "../utils/formatDai";
 import Fees from "./Fees";
+import { teleportDai } from "../utils/teleportDai";
 
 type Props = {};
 
@@ -39,13 +40,13 @@ function Bridger({}: Props) {
   // Instancing the teleport bridge
   // let signer: Signer = new ethers.VoidSigner(address, provider)
   const defaultBridge = new TeleportBridge({
-    srcDomain: "arbitrum"
+    srcDomain: "ETH-MAIN-A"
   })
   const [bridge, setBridge] = useState<TeleportBridge>(defaultBridge)
   
   useEffect(() => {
     const newBridge = new TeleportBridge({
-      srcDomain: origin.id === 10 || origin.id === 42161 ? origin.network as DomainDescription: "arbitrum",
+      srcDomain: origin.id === 10 || origin.id === 42161 ? origin.network as DomainDescription: "ETH-MAIN-A",
       srcDomainProvider: provider
     })
     setBridge(newBridge)
@@ -96,7 +97,7 @@ function Bridger({}: Props) {
                 <Fees bridge={bridge} selectedAmount={selectedAmount}/>
               </div>
 
-              <Button disabled={!isSupported(origin.id, destiny.id)} onClick={() => bridge.approveSrcGateway(signer? signer : undefined, selectedAmount)}>
+              <Button onClick={() => teleportDai(bridge, selectedAmount, signer as Signer)}>
                 Bridge
               </Button>
             </div>
