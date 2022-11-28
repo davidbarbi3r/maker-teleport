@@ -29,7 +29,13 @@ const DaiBalanceContextProvider = (props: ContextProviderProps) => {
       process.env.NEXT_PUBLIC_RPC_PROVIDER_MAINNET
     )
   );
-  // const contractGoerli = new ethers.Contract(contracts.goerli.dai, mainnetAbi, provider);
+  const contractGoerli = new ethers.Contract(
+    contracts.goerli.dai,
+    mainnetAbi, 
+    new ethers.providers.JsonRpcProvider(
+      process.env.NEXT_PUBLIC_RPC_PROVIDER_GOERLI
+    )
+  );
   const contractOptimism = new ethers.Contract(
     contracts.optimism.dai,
     optimismAbi,
@@ -52,7 +58,7 @@ const DaiBalanceContextProvider = (props: ContextProviderProps) => {
     address ? `dai-balances-${address}` : null,
     async () => {
       const respMainnet = await contractMainnet.balanceOf(address);
-      // const respGoerli = await contractGoerli.balanceOf(address);
+      const respGoerli = await contractGoerli.balanceOf(address);
       const respOptimism = await contractOptimism.balanceOf(address);
       const respArbitrum = await contractArbitrum.balanceOf(address);
 
@@ -60,7 +66,7 @@ const DaiBalanceContextProvider = (props: ContextProviderProps) => {
         mainnet: respMainnet,
         optimism: respOptimism,
         arbitrum: respArbitrum,
-        goerli: BigNumber.from(0),
+        goerli: respGoerli,
         total: respArbitrum.add(respMainnet.add(respOptimism))
       };
     }
