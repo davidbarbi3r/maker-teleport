@@ -81,7 +81,7 @@ export default function Decoration() {
           colorInterpolationFilters="sRGB"
           filterUnits="userSpaceOnUse"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
+          <feFlood floodOpacity="0" result="BackgroundImageFix"></feFlood>
           <feBlend
             in="SourceGraphic"
             in2="BackgroundImageFix"
@@ -101,7 +101,7 @@ export default function Decoration() {
           colorInterpolationFilters="sRGB"
           filterUnits="userSpaceOnUse"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
+          <feFlood floodOpacity="0" result="BackgroundImageFix"></feFlood>
           <feBlend
             in="SourceGraphic"
             in2="BackgroundImageFix"
@@ -121,7 +121,7 @@ export default function Decoration() {
           colorInterpolationFilters="sRGB"
           filterUnits="userSpaceOnUse"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
+          <feFlood floodOpacity="0" result="BackgroundImageFix"></feFlood>
           <feGaussianBlur
             in="BackgroundImage"
             stdDeviation="30"
@@ -146,7 +146,7 @@ export default function Decoration() {
           colorInterpolationFilters="sRGB"
           filterUnits="userSpaceOnUse"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
+          <feFlood floodOpacity="0" result="BackgroundImageFix"></feFlood>
           <feGaussianBlur
             in="BackgroundImage"
             stdDeviation="30"
@@ -171,7 +171,7 @@ export default function Decoration() {
           colorInterpolationFilters="sRGB"
           filterUnits="userSpaceOnUse"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
+          <feFlood floodOpacity="0" result="BackgroundImageFix"></feFlood>
           <feGaussianBlur
             in="BackgroundImage"
             stdDeviation="30"
@@ -195,8 +195,8 @@ export default function Decoration() {
           gradientTransform="matrix(0 379 -379 0 1387 619.782)"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#BFFFF0"></stop>
-          <stop offset="1" stop-color="#FEFFC7" stop-opacity="0"></stop>
+          <stop stopColor="#BFFFF0"></stop>
+          <stop offset="1" stopColor="#FEFFC7" stopOpacity="0"></stop>
         </radialGradient>
         <radialGradient
           id="paint1_radial"
@@ -206,8 +206,8 @@ export default function Decoration() {
           gradientTransform="matrix(0 379 -379 0 533 617.782)"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#EAE2FF"></stop>
-          <stop offset="1" stop-color="#FFC8CE" stop-opacity="0"></stop>
+          <stop stopColor="#EAE2FF"></stop>
+          <stop offset="1" stopColor="#FFC8CE" stopOpacity="0"></stop>
         </radialGradient>
         <radialGradient
           id="paint2_radial"
@@ -217,8 +217,8 @@ export default function Decoration() {
           gradientTransform="matrix(0 379 -379 0 1025 447.782)"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#EAE2FF"></stop>
-          <stop offset="1" stop-color="#FFC8CE" stop-opacity="0"></stop>
+          <stop stopColor="#EAE2FF"></stop>
+          <stop offset="1" stopColor="#FFC8CE" stopOpacity="0"></stop>
         </radialGradient>
         <radialGradient
           id="paint3_radial"
@@ -228,8 +228,8 @@ export default function Decoration() {
           gradientTransform="matrix(0 379 -379 0 979.001 603.783)"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FFF8E0"></stop>
-          <stop offset="1" stop-color="#D3EFFF" stop-opacity="0"></stop>
+          <stop stopColor="#FFF8E0"></stop>
+          <stop offset="1" stopColor="#D3EFFF" stopOpacity="0"></stop>
         </radialGradient>
         <linearGradient
           id="paint4_linear"
@@ -239,7 +239,7 @@ export default function Decoration() {
           y2="941.718"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#141414"></stop>
+          <stop stopColor="#141414"></stop>
           <stop offset="1"></stop>
         </linearGradient>
         <linearGradient
@@ -250,7 +250,7 @@ export default function Decoration() {
           y2="738.34"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#141414"></stop>
+          <stop stopColor="#141414"></stop>
           <stop offset="1"></stop>
         </linearGradient>
         <linearGradient
@@ -261,8 +261,8 @@ export default function Decoration() {
           y2="656.783"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#141414"></stop>
-          <stop offset="1" stop-opacity="0.57"></stop>
+          <stop stopColor="#141414"></stop>
+          <stop offset="1" stopOpacity="0.57"></stop>
         </linearGradient>
       </defs>
     </svg>
