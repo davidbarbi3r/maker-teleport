@@ -2,7 +2,7 @@ import { formatUnits } from "ethers/lib/utils.js";
 import { useContext } from "react";
 import { useAccount } from "wagmi";
 import { DaiBalanceContext } from "../context/BalanceContext";
-import { formatDai } from "../utils/formatUnits";
+import { formatDai } from "../utils/formatDai";
 
 export default function BalancesOnChains() {
   const { address } = useAccount();

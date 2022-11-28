@@ -6,7 +6,7 @@ import { useContext, useEffect } from "react";
 import { formatUnits } from "ethers/lib/utils.js";
 import { DaiBalanceContext } from "../context/BalanceContext";
 import Button from "../../app/components/Button";
-import { formatDai } from "../utils/formatUnits";
+import { formatDai } from "../utils/formatDai";
 
 export default function DaiBalance({
   chain,
