@@ -61,6 +61,7 @@ const DaiBalanceContextProvider = (props: ContextProviderProps) => {
         optimism: respOptimism,
         arbitrum: respArbitrum,
         goerli: BigNumber.from(0),
+        total: respArbitrum.add(respMainnet.add(respOptimism))
       };
     }
   );
@@ -73,6 +74,7 @@ const DaiBalanceContextProvider = (props: ContextProviderProps) => {
         goerli: BigNumber.from(0),
         optimism: BigNumber.from(0),
         arbitrum: BigNumber.from(0),
+        total: BigNumber.from(0)
       };
 
   // returns the balance for a given chain

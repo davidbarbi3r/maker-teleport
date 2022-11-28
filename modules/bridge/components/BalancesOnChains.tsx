@@ -1,4 +1,4 @@
-import { formatUnits } from "ethers/lib/utils.js";
+import { BigNumber } from "ethers";
 import { useContext } from "react";
 import { useAccount } from "wagmi";
 import { DaiBalanceContext } from "../context/BalanceContext";
@@ -7,6 +7,10 @@ import { formatDai } from "../utils/formatDai";
 export default function BalancesOnChains() {
   const { address } = useAccount();
   const { balance } = useContext(DaiBalanceContext);
+
+  //Check if total DAI Balance on chain equal 0
+  const isTotalZero = balance.total.eq(BigNumber.from(0)) 
+
   return (
     <div>
       {address && (
@@ -31,6 +35,7 @@ export default function BalancesOnChains() {
             </div>
           </div>
 
+          {isTotalZero && <p>You have no DAI on supported chains, you can swap DAI on Uniswap or Velodrome and come back</p>}
           <p>Your address {address}</p>
         </div>
       )}

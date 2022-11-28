@@ -5,4 +5,5 @@ export default interface IDaiBalance {
     goerli: BigNumber;
     optimism: BigNumber;
     arbitrum: BigNumber;
+    total: BigNumber;
   }
