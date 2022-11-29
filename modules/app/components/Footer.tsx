@@ -10,7 +10,7 @@ export function Footer() {
         </div>
       </div>
       <div style={{ padding: "30px", textAlign: "center" }}>
-        2022 - {config.name}
+        2022 - {config.name}. Powered by <a style={{ color: 'inherit'}} href="https://makergrowth.github.io/teleport-sdk-docs/" title="Teleport SDK">Teleport SDK</a>.
       </div>
       <style jsx>
         {`

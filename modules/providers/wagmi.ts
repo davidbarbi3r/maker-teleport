@@ -5,7 +5,7 @@ import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
 import config from "../config";
 
 // Returns the RPC for the network. If it's not configured return undefined
-function getRPCforChainId(id: number): string | undefined {
+export function getRPCforChainId(id: number): string | undefined {
   switch (id) {
     case chainId.mainnet:
       return process.env.NEXT_PUBLIC_RPC_PROVIDER_MAINNET;

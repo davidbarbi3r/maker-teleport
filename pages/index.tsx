@@ -5,6 +5,7 @@ import Bridger from "../modules/bridge/components/Bridger";
 import { Layout } from "../modules/app/components/Layout";
 import BalancesOnChains from "../modules/bridge/components/BalancesOnChains";
 import Decoration from "../modules/app/components/Decoration";
+import Image from "next/image";
 
 export default function Home() {
   const { address } = useAccount();
@@ -27,19 +28,13 @@ export default function Home() {
             Move DAI from one network to another using the safe and cheap Maker
             Teleport Bridge.
           </div>
+          <div className="image" style={{ marginTop: "15px" }}>
+            <Image src="/images/dai-logo.png" width={50} height={50} />
+          </div>
         </div>
 
         {show && (
           <div className="connection">
-            {!address && (
-              <div className="container">
-                <p>
-                  Please, connect your wallet to continue. Supported networks:
-                  Arbitrum, Optimism, Ethereum Mainnet.{" "}
-                </p>
-                <ConnectButton />
-              </div>
-            )}
             <Bridger />
 
             <div className="balances">
@@ -68,14 +63,23 @@ export default function Home() {
           padding: 15px;
         }
 
-        .container {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-        }
-
         .balances {
           margin-top: 60px;
+        }
+
+        .image {
+          animation: rotateY-anim 3s linear infinite;
+
+        }
+
+        @keyframes rotateY-anim {
+          0% {
+            transform: rotateY(0deg);
+          }
+
+          100% {
+            transform: rotateY(360deg);
+          }
         }
       `}</style>
     </Layout>

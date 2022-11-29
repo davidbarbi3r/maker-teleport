@@ -1,4 +1,4 @@
-import { Chain } from "wagmi";
+import { Chain, chainId } from "wagmi";
 import { chains } from "../../providers/wagmi";
 
 export default function BridgeNetworkSelector({
@@ -13,8 +13,22 @@ export default function BridgeNetworkSelector({
   onChangeDestiny: (c: Chain) => void;
 }): React.ReactElement {
   const allNetworks = chains;
-  const originNetworks = chains;
-  const destinyNetworks = chains.filter((i) => i.id !== origin.id);
+
+  
+  const isL1 = (id: number) => id === chainId.mainnet;
+  const isL2 = (id: number) => id === chainId.optimism || id === chainId.arbitrum;
+  const isTestnet = (id: number) => id === chainId.goerli;
+
+
+  const originNetworks = chains.filter(i => !isTestnet(i.id));
+  const destinyNetworks = chains.filter((i) => i.id !== origin.id).filter(i => {
+    if (isL1(origin.id)) {
+      // Origin is L1, show only L2
+      return isL2(i.id)
+    } else {
+      return isL1(i.id )
+    }
+  });
 
   // handles the change of the select origin
   const onChangeSelectOrigin = (val: number) => {
@@ -24,6 +38,10 @@ export default function BridgeNetworkSelector({
   const onChangeSelectDestiny = (val: number) => {
     onChangeDestiny(allNetworks.find((c) => c.id === val) as Chain);
   };
+
+  // Current supported bridges are L1 -> L2, L2 -> L1. 
+  // L2->L2 is NOT supported yet.
+
 
   return (
     <div>

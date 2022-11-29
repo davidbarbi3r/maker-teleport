@@ -1,30 +1,35 @@
 import { BigNumber } from "ethers";
+import Image from "next/image";
 import { useContext } from "react";
 import { useAccount } from "wagmi";
 import { DaiBalanceContext } from "../context/BalanceContext";
 import { formatDai } from "../utils/formatDai";
+import { DaiSwap } from "./DaiSwap";
 
 export default function BalancesOnChains() {
   const { address } = useAccount();
   const { balance } = useContext(DaiBalanceContext);
 
   //Check if total DAI Balance on chain equal 0
-  const isTotalZero = balance.total.eq(BigNumber.from(0)) 
+  const isTotalZero = balance.total.eq(BigNumber.from(0));
 
   return (
     <div>
       {address && (
         <div className="wrapper">
-          <div className="title">DAI balance</div>
+          <div className="title">
+            <Image src="/images/dai-logo.png" width={50} height={50} />{" "}
+            <span style={{ marginLeft: "10px" }}>DAI Balance</span>
+          </div>
           <div className="networks">
             <div className="network">
               <div className="network-title">Mainet</div>{" "}
               <div className="balance">{formatDai(balance.mainnet)} DAI</div>
             </div>
-            <div className="network">
+            {/* <div className="network">
               <div className="network-title">Goerli</div>{" "}
               <div className="balance">{formatDai(balance.goerli)} DAI</div>
-            </div>
+            </div> */}
             <div className="network">
               <div className="network-title">Optimism</div>{" "}
               <div className="balance">{formatDai(balance.optimism)} DAI</div>
@@ -35,8 +40,18 @@ export default function BalancesOnChains() {
             </div>
           </div>
 
-          {isTotalZero && <p>You have no DAI on supported chains, you can swap DAI on Uniswap or Velodrome and come back</p>}
-          <p>Your address {address}</p>
+          {isTotalZero && (
+            <div>
+              <p>
+                Your address has 0.00 DAI. Get some DAI first on apps like
+                Uniswap or mint some opening a vault on{" "}
+                <a style={{ color: "inherit" }} href="https://oasis.app/">
+                  Oasis App
+                </a>
+              </p>
+            </div>
+          )}
+          <DaiSwap />
         </div>
       )}
       <style jsx>{`
@@ -52,6 +67,8 @@ export default function BalancesOnChains() {
               rgb(232, 255, 245) 49.48%,
               rgb(249, 225, 235) 100%
             );
+
+          background-repeat: no-repeat;
           padding: 15px;
           border-radius: 16px;
           box-shadow: 5px 4px 10px rgba(0, 0, 0, 0.15);
@@ -65,6 +82,8 @@ export default function BalancesOnChains() {
         .title {
           font-weight: bold;
           font-size: 20px;
+          display: flex;
+          align-items: center;
         }
 
         .networks {
