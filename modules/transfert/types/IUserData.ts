@@ -1,4 +1,5 @@
 export interface IUserData {
+    id: number
     amount: string,
     origin: string,
     destiny: string,
