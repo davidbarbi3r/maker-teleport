@@ -18,7 +18,7 @@ export default function BalancesOnChains() {
       {address && (
         <div className="wrapper">
           <div className="title">
-            <Image src="/images/dai-logo.png" width={50} height={50} />{" "}
+            <Image src="/images/dai-logo.png" width={50} height={50} alt="DAI Logo"/>{" "}
             <span style={{ marginLeft: "10px" }}>DAI Balance</span>
           </div>
           <div className="networks">

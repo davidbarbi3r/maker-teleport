@@ -29,7 +29,7 @@ export default function Home() {
             Teleport Bridge.
           </div>
           <div className="image" style={{ marginTop: "15px" }}>
-            <Image src="/images/dai-logo.png" width={50} height={50} />
+            <Image src="/images/dai-logo.png" width={50} height={50} alt="DAI Logo"/>
           </div>
         </div>
 
