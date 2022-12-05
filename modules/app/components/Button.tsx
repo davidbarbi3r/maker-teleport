@@ -34,6 +34,8 @@ function Button({
             font-weight: bold;
             font-size: 0.9rem;
             transition: all 150ms;
+            opacity: ${disabled ? "60%" : "100%"};
+            margin-right: 1em;
           }
 
           .std-btn.secondary {
@@ -42,8 +44,8 @@ function Button({
           }
 
           .std-btn:hover {
-            transform: scale(1.05);
-            cursor: pointer;
+            transform: ${disabled ? "": "scale(1.05)"};
+            cursor: ${disabled ? "not-allowed" : "pointer"};
           }
 
           .std-btn:active {
