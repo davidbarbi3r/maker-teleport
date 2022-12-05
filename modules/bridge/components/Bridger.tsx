@@ -10,7 +10,7 @@ import { chainId, useAccount, useNetwork, useProvider, useSigner } from "wagmi";
 import { DomainDescription, DomainId, TeleportBridge } from "teleport-sdk";
 import { formatDai } from "../utils/formatDai";
 import Fees from "./Fees";
-import { teleportDai } from "../utils/teleportDai";
+import { approveGateway, teleportDai } from "../utils/teleportDai";
 import { NetworkSwitch } from "./NetworkSwitch";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 
@@ -47,6 +47,7 @@ function Bridger({}: Props) {
   });
 
   const [bridge, setBridge] = useState<TeleportBridge>(defaultBridge);
+  const [gatewayAllowance, setGatewayAllowance] = useState<BigNumber>(BigNumber.from(0))
 
   useEffect(() => {
     if (provider) {
@@ -65,9 +66,22 @@ function Bridger({}: Props) {
         ),
       });
       setBridge(newBridge);
-    }
-  }, [origin, provider]);
 
+      //I don't know which is best way to fetch gateway allowance because here it causes many renders if I put bridge as dependency
+      address && bridge.getSrcGatewayAllowance(address)
+      .then((res) => setGatewayAllowance(res))
+
+    }
+  }, []);
+
+  console.log("approved dai: " + gatewayAllowance)
+
+  const disableBridge = (selectedAmount: BigNumber) => {
+    if (gatewayAllowance.eq(0) || gatewayAllowance.lt(selectedAmount)){
+      return true
+    }
+    return false
+  }
   // DAI balance on all supported chains
   const { balanceOfChain } = useContext(DaiBalanceContext);
 
@@ -77,6 +91,7 @@ function Bridger({}: Props) {
   // Used to switch network
   const isInOriginNetwork = chain && chain.id === origin.id;
 
+  console.log(origin, destiny)
   return (
     <div className="bridger-container">
       {!address && (
@@ -113,7 +128,7 @@ function Bridger({}: Props) {
         )}
         {address && balanceInCurrentChain.lte(0) && (
           <div>
-            Insufficient DAI balance on {chain?.name}. Get some DAI first
+            Insufficient DAI balance on {origin.name}. Get some DAI first
           </div>
         )}
       </div>
@@ -133,8 +148,16 @@ function Bridger({}: Props) {
                 {origin.name} to {destiny.name}.
                 <Fees bridge={bridge} selectedAmount={selectedAmount} />
               </div>
-
               <Button
+                disabled={!disableBridge(selectedAmount)}
+                onClick={() =>
+                  approveGateway(bridge, signer as Signer, selectedAmount, gatewayAllowance)
+                }
+              >
+                Approve DAI
+              </Button>
+              <Button
+                disabled={disableBridge(selectedAmount)}
                 onClick={() =>
                   teleportDai(bridge, selectedAmount, signer as Signer)
                 }
@@ -146,10 +169,6 @@ function Bridger({}: Props) {
 
           {!hasSufficientBalance && <div>Insufficient Balance</div>}
         </div>
-      )}
-
-      {!isSupported(origin.id, destiny.id) && (
-        <p>🚧 L2 to L2 bridge are not yet supported 🚧</p>
       )}
 
       <style jsx>{`

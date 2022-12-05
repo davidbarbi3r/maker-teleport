@@ -21,8 +21,6 @@ export default function Fees({ bridge, selectedAmount }: Props) {
     bridge.getAmounts(selectedAmount).then((res) => setFees(res));
   }, [bridge, selectedAmount]);
 
-  console.log(fees);
-
   return (
     <>
       {fees && (
