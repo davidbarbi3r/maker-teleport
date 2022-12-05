@@ -1,6 +1,23 @@
 import { BigNumber, Signer } from "ethers";
 import { formatUnits } from "ethers/lib/utils.js";
-import { Call, getAmounts, TeleportBridge } from "teleport-sdk";
+import { Call, TeleportBridge } from "teleport-sdk";
+
+export const approveGateway = async (bridge: TeleportBridge, signer: Signer, selectedAmount: BigNumber, allowance: BigNumber) => {
+  const address = await signer.getAddress();
+
+  if (
+    allowance.eq(BigNumber.from(0)) ||
+    allowance.lt(selectedAmount)
+  ) {
+    try {
+      await bridge.approveSrcGateway(signer, selectedAmount);
+    } catch (error) {
+      window.alert("Ops an error occured 😭, check the console");
+      console.log(error);
+    }
+  }
+}
+
 
 export const teleportDai = async (
   bridge: TeleportBridge,
@@ -8,29 +25,17 @@ export const teleportDai = async (
   signer: Signer
 ) => {
   const address = await signer.getAddress();
-  const gatewayAllowance = await bridge.getSrcGatewayAllowance(address);
+  
   let txHash: Call = {} as Call;
-
-  console.log(formatUnits(gatewayAllowance));
-  //if there's no gatewayApproval for this adress or appproval for an amount less important than selected
-  if (
-    gatewayAllowance.eq(BigNumber.from(0)) ||
-    gatewayAllowance.lt(selectedAmount)
-  )
-    console.log("I'm in if block");
-  try {
-    await bridge.approveSrcGateway(signer ? signer : undefined, selectedAmount);
-  } catch (error) {
-    window.alert("Ops an error occured 😭, check the console");
-    console.log(error);
-  }
-
-  console.log("Allowance is ok");
+  
   //allowance should be ok, now init teleport and store the transaction hash
   try {
+    console.log("I'm in the try block")
+    console.log(address, selectedAmount)
     await bridge
       .initTeleport(address, selectedAmount)
-      .then((res) => (txHash = res));
+        .then((res) => (txHash = res));
+    console.log(txHash)
   } catch (error) {
     window.alert("Ops an error occured 😭, check the console");
     console.log(error);
