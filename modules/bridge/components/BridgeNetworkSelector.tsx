@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react"
 import { Chain, chainId } from "wagmi";
 import { chains } from "../../providers/wagmi";
 
@@ -14,6 +14,7 @@ export default function BridgeNetworkSelector({
   onChangeDestiny: (c: Chain) => void;
 }): React.ReactElement {
   const allNetworks = chains;
+  const originRef = useRef<HTMLSelectElement | null>(null)
   
   const isL1 = (id: number) => id === chainId.mainnet;
   const isL2 = (id: number) => id === chainId.optimism || id === chainId.arbitrum;
@@ -34,10 +35,17 @@ export default function BridgeNetworkSelector({
       // Origin is L1, show only L2
       return isL2(i.id)
     } else {
-      onChangeSelectDestiny(chainId.mainnet)
       return isL1(i.id )
     }
   });
+
+  //added this piece of code because when switched to a L2 chain for origin, 
+  //the destiny remained set as previous value instead of ethereum 
+  useEffect(() => {
+    if (originRef.current?.value && isL2(parseInt(originRef.current?.value))){
+      onChangeDestiny(chains[0])
+    }
+  }, [originRef.current?.value])
 
   // Current supported bridges are L1 -> L2, L2 -> L1. 
   // L2->L2 is NOT supported yet.
@@ -49,6 +57,7 @@ export default function BridgeNetworkSelector({
         <div className="origin">
           <h3>Origin</h3>
           <select
+            ref={originRef}
             value={origin.id}
             onChange={(e) => {
               onChangeSelectOrigin(parseInt(e.target.value));
