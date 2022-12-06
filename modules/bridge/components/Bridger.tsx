@@ -75,8 +75,8 @@ function Bridger({}: Props) {
       console.log("Bridger setup: ", srcDomain, dstDomain);
       const newBridge = new TeleportBridge({
         srcDomain,
-        srcDomainProvider,
         dstDomain,
+        srcDomainProvider,
         dstDomainProvider,
       });
       setBridge(newBridge);
