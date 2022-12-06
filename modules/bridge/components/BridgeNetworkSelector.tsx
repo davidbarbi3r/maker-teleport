@@ -29,7 +29,8 @@ export default function BridgeNetworkSelector({
     onChangeDestiny(allNetworks.find((c) => c.id === val) as Chain);
   };
 
-  const originNetworks = chains.filter(i => !isTestnet(i.id));
+  //added && !isL1(i.id) to filter out L1 origin
+  const originNetworks = chains.filter(i => !isTestnet(i.id) && !isL1(i.id));
   const destinyNetworks = chains.filter((i) => i.id !== origin.id).filter(i => {
     if (isL1(origin.id)) {
       // Origin is L1, show only L2
@@ -84,9 +85,9 @@ export default function BridgeNetworkSelector({
           <h3>Destiny</h3>
           <select
             value={destiny.id}
-            onChange={(e) => {
-              onChangeSelectDestiny(parseInt(e.target.value));
-            }}
+            // onChange={(e) => {
+            //   onChangeSelectDestiny(parseInt(e.target.value));
+            // }}
           >
             {destinyNetworks.map((c) => {
               return (

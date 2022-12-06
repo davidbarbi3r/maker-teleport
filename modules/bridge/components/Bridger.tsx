@@ -25,8 +25,8 @@ function Bridger({}: Props) {
   const [selectedAmount, setSelectedAmount] = useState(BigNumber.from(0));
 
   // Handle the origin and destiny networks
-  const [origin, setOrigin] = useState(chains[0]);
-  const [destiny, setDestiny] = useState(chains[2]);
+  const [origin, setOrigin] = useState(chains[2]);
+  const [destiny, setDestiny] = useState(chains[0]);
 
   function isSupported(originId: number, destinyId: number): Boolean {
     if (
