@@ -5,6 +5,7 @@ type Props = {
   onClick?: () => void;
   disabled?: boolean;
   secondary?: boolean;
+  fullWidth?: boolean;
 };
 
 function Button({
@@ -12,6 +13,7 @@ function Button({
   onClick = () => null,
   secondary,
   disabled,
+  fullWidth
 }: Props) {
   return (
     <>
@@ -36,6 +38,7 @@ function Button({
             transition: all 150ms;
             opacity: ${disabled ? "60%" : "100%"};
             margin-right: 1em;
+            width: ${fullWidth ? '100%': 'auto'};
           }
 
           .std-btn.secondary {

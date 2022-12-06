@@ -44,8 +44,16 @@ export default function BridgeNetworkSelector({
   useEffect(() => {
     if (originRef.current?.value && isL2(parseInt(originRef.current?.value))){
       onChangeDestiny(chains[0])
+      
+    }
+
+    if (originRef.current?.value && isL1(parseInt(originRef.current?.value))){
+      onChangeDestiny(chains[2])
+      
     }
   }, [originRef.current?.value])
+
+  
 
   // Current supported bridges are L1 -> L2, L2 -> L1. 
   // L2->L2 is NOT supported yet.

@@ -44,6 +44,9 @@ export default function Home() {
         )}
       </div>
       <style jsx>{`
+        .page-content {
+          max-width: 600px;
+        }
         .page-bg {
           box-sizing: border-box;
           margin: 0px;

@@ -3,7 +3,6 @@ import { formatUnits } from "ethers/lib/utils.js";
 import { Call, TeleportBridge } from "teleport-sdk";
 
 export const approveGateway = async (bridge: TeleportBridge, signer: Signer, selectedAmount: BigNumber, allowance: BigNumber) => {
-  const address = await signer.getAddress();
 
   if (
     allowance.eq(BigNumber.from(0)) ||

@@ -18,8 +18,7 @@ type Props = {};
 
 function Bridger({}: Props) {
   const { address } = useAccount();
-  const provider = useProvider();
-  const { data: signer, isError, isLoading } = useSigner();
+  const { data: signer } = useSigner();
   const { chain } = useNetwork();
 
   // Amount that the user will bridge
@@ -27,7 +26,7 @@ function Bridger({}: Props) {
 
   // Handle the origin and destiny networks
   const [origin, setOrigin] = useState(chains[0]);
-  const [destiny, setDestiny] = useState(chains[1]);
+  const [destiny, setDestiny] = useState(chains[2]);
 
   function isSupported(originId: number, destinyId: number): Boolean {
     if (
@@ -40,48 +39,69 @@ function Bridger({}: Props) {
     }
   }
 
-  // Instancing the teleport bridge
-  // let signer: Signer = new ethers.VoidSigner(address, provider)
-  const defaultBridge = new TeleportBridge({
-    srcDomain: "ETH-MAIN-A",
-  });
+  // Bridge instance, it gets replaced every time we change network
+  const [bridge, setBridge] = useState<TeleportBridge | null>(null);
 
-  const [bridge, setBridge] = useState<TeleportBridge>(defaultBridge);
-  const [gatewayAllowance, setGatewayAllowance] = useState<BigNumber>(BigNumber.from(0))
+  // Total allowed DAI by the user. It get's changed every time we switch network or address
+  const [gatewayAllowance, setGatewayAllowance] = useState<BigNumber>(
+    BigNumber.from(0)
+  );
 
+  // Use effect to reinstantiate the bridge every time we switch networks
   useEffect(() => {
-    if (provider) {
+    const srcIsL2 =
+      origin.id === chainId.optimism || origin.id === chainId.arbitrum;
+    const srcDomain = srcIsL2
+      ? (origin.network as DomainDescription)
+      : "ETH-MAIN-A";
+
+    const dstIsL2 =
+      destiny.id === chainId.optimism || destiny.id === chainId.arbitrum;
+    const dstDomain = dstIsL2 ? (destiny.network as DomainId) : "ETH-MAIN-A";
+
+    const srcDomainProvider = new ethers.providers.JsonRpcProvider(
+      getRPCforChainId(origin.id)
+    );
+
+    const dstDomainProvider = new ethers.providers.JsonRpcProvider(
+      getRPCforChainId(destiny.id)
+    );
+    // Only intantiate bridge if src is different thatn dst and they are not both L1 or both L2
+    if (
+      srcDomain !== dstDomain &&
+      !(srcIsL2 && dstIsL2) &&
+      !(!srcIsL2 && !dstIsL2)
+    ) {
+      console.log("Bridger setup: ", srcDomain, dstDomain);
       const newBridge = new TeleportBridge({
-        srcDomain:
-          origin.id === chainId.optimism || origin.id === chainId.arbitrum
-            ? (origin.network as DomainDescription)
-            : "ETH-MAIN-A",
-        srcDomainProvider: provider,
-        dstDomain:
-          destiny.id === chainId.optimism || destiny.id === chainId.arbitrum
-            ? (destiny.network as DomainId)
-            : "ETH-MAIN-A",
-        dstDomainProvider: new ethers.providers.JsonRpcProvider(
-          getRPCforChainId(destiny.id)
-        ),
+        srcDomain,
+        srcDomainProvider,
+        dstDomain,
+        dstDomainProvider,
       });
       setBridge(newBridge);
-
-      //I don't know which is best way to fetch gateway allowance because here it causes many renders if I put bridge as dependency
-      address && bridge.getSrcGatewayAllowance(address)
-      .then((res) => setGatewayAllowance(res))
-
     }
-  }, []);
+  }, [destiny, origin]);
 
-  console.log("approved dai: " + gatewayAllowance)
+  // Use effect to check allowances every time the user changes the address
+  useEffect(() => {
+    const checkAllowances = async () => {
+      if (address && bridge) {
+        // Checks that the user has allowance
+        bridge
+          .getSrcGatewayAllowance(address)
+          .then((res) => setGatewayAllowance(res));
+      }
+    };
+    checkAllowances();
+  }, [bridge, address]);
 
-  const disableBridge = (selectedAmount: BigNumber) => {
-    if (gatewayAllowance.eq(0) || gatewayAllowance.lt(selectedAmount)){
-      return true
-    }
-    return false
-  }
+  console.log("approved dai: " + gatewayAllowance);
+
+  // Helper to determine if the  user approved enough DAI
+  const hasEnoughAllowance = (selectedAmount: BigNumber) => {
+    return gatewayAllowance.gte(selectedAmount);
+  };
   // DAI balance on all supported chains
   const { balanceOfChain } = useContext(DaiBalanceContext);
 
@@ -91,7 +111,42 @@ function Bridger({}: Props) {
   // Used to switch network
   const isInOriginNetwork = chain && chain.id === origin.id;
 
-  console.log(origin, destiny)
+  // Approve / Bridge logic
+  // UI states for the approve / bridge buttons
+  const [loadingBridge, setLoadingBridge] = useState(false);
+  const [loadingApprove, setLoadingApprove] = useState(false);
+
+  const onClickApproveDAI = async () => {
+    if (bridge) {
+      setLoadingApprove(true);
+
+      try {
+        await approveGateway(
+          bridge,
+          signer as Signer,
+          selectedAmount,
+          gatewayAllowance
+        );
+        setLoadingApprove(false);
+      } catch (e) {
+        setLoadingApprove(false);
+      }
+    }
+  };
+
+  const onClickBridgeDAI = async () => {
+    if (bridge) {
+      setLoadingBridge(true);
+
+      try {
+        await teleportDai(bridge, selectedAmount, signer as Signer);
+        setLoadingBridge(false);
+      } catch (e) {
+        setLoadingBridge(false);
+      }
+    }
+  };
+
   return (
     <div className="bridger-container">
       {!address && (
@@ -114,9 +169,6 @@ function Bridger({}: Props) {
       )}
       <h3>2. Select DAI amount</h3>
       <div className="selector">
-        <div className="balance">
-          <DaiBalance chain={origin} onSelectBalance={setSelectedAmount} />
-        </div>
         {balanceInCurrentChain.gt(0) && (
           <div className="input">
             <input
@@ -126,6 +178,9 @@ function Bridger({}: Props) {
             />
           </div>
         )}
+        <div className="balance">
+          <DaiBalance chain={origin} onSelectBalance={setSelectedAmount} />
+        </div>
         {address && balanceInCurrentChain.lte(0) && (
           <div>
             Insufficient DAI balance on {origin.name}. Get some DAI first
@@ -139,31 +194,41 @@ function Bridger({}: Props) {
         <div>Select how much DAI you want to bridge first.</div>
       )}
 
-      {selectedAmount.gt(0) && isSupported(origin.id, destiny.id) && (
+      {selectedAmount.gt(0) && isSupported(origin.id, destiny.id) && bridge && (
         <div>
           {hasSufficientBalance && (
             <div>
+              <div className="actions">
+                <div className="action">
+                  <Button
+                    fullWidth
+                    disabled={
+                      hasEnoughAllowance(selectedAmount) || loadingApprove
+                    }
+                    onClick={onClickApproveDAI}
+                  >
+                    {loadingApprove
+                      ? "Approving..."
+                      : hasEnoughAllowance(selectedAmount)
+                      ? "Approved"
+                      : "Approve DAI"}
+                  </Button>
+                </div>
+                <div className="action">
+                  <Button
+                    fullWidth
+                    disabled={!hasEnoughAllowance(selectedAmount)}
+                    onClick={onClickBridgeDAI}
+                  >
+                    {loadingBridge ? "Bridging..." : "Bridge"}
+                  </Button>
+                </div>
+              </div>
               <div className="instructions">
                 You are going to bridge {formatDai(selectedAmount)} DAI from{" "}
                 {origin.name} to {destiny.name}.
                 <Fees bridge={bridge} selectedAmount={selectedAmount} />
               </div>
-              <Button
-                disabled={!disableBridge(selectedAmount)}
-                onClick={() =>
-                  approveGateway(bridge, signer as Signer, selectedAmount, gatewayAllowance)
-                }
-              >
-                Approve DAI
-              </Button>
-              <Button
-                disabled={disableBridge(selectedAmount)}
-                onClick={() =>
-                  teleportDai(bridge, selectedAmount, signer as Signer)
-                }
-              >
-                Bridge
-              </Button>
             </div>
           )}
 
@@ -202,6 +267,21 @@ function Bridger({}: Props) {
 
         .balance {
           margin: 15px;
+        }
+
+        .instructions {
+          margin-top: 15px;
+        }
+
+        .actions {
+          display: flex;
+          justify-content: space-between;
+        }
+
+        .action {
+          width: 50%;
+          margin-left: 15px;
+          margin-right: 15px;
         }
       `}</style>
     </div>
