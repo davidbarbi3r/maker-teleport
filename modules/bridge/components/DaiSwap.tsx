@@ -2,6 +2,8 @@ import { chainId, useNetwork } from "wagmi";
 import { useState } from "react";
 import Image from "next/image";
 import { contracts } from "../../../eth-sdk/config";
+import { SwapWidget, Theme, darkTheme } from "@uniswap/widgets";
+
 
 export function DaiSwap() {
   const { chain } = useNetwork();
@@ -21,12 +23,28 @@ export function DaiSwap() {
     }
   };
 
+  const uniswapStyle: Theme = {
+    ...darkTheme,
+    primary: 'black',
+    secondary: 'black',
+    interactive: '#1aab9b',
+    container: '#f2efef',
+    module: '#fff',
+    accent: '#1aab9b',
+    outline: '#1aab9b',
+    dialog: '#FFF',
+    fontFamily: 'FT Polar Trial',
+    borderRadius: 30,
+    tokenColorExtraction: true,
+    fontFamilyCode: "white"
+  }
+
   const daiOrigin = getDaiContractAddress(chain ? chain.id : 1);
 
   return (
     <div>
       <div className="dai-title-swap" onClick={() => setShow((prev) => !prev)}>
-        <h2>Quickly get some DAI on {" "} 
+        <h2>Quickly get some DAI with {" "} 
           <a style={{color: 'black'}} href={`https://app.uniswap.org/#/swap?exactField=input&outputCurrency=${daiOrigin}`}>
             Uniswap
           </a>
@@ -35,16 +53,24 @@ export function DaiSwap() {
           <Image src="/images/right-arrow.svg" width={20} height={20} alt="Right arrow" />
         </div>
       </div>
-      <iframe
-        src={`https://app.uniswap.org/#/swap?exactField=input&outputCurrency=${daiOrigin}`}
-        height="660px"
-        width="100%"
-      />
+      <div className="uniswap">
+        {/* <iframe
+          src={`https://app.uniswap.org/#/swap?exactField=input&outputCurrency=${daiOrigin}`}
+          height="660px"
+          width="100%"
+        /> */}
+        <SwapWidget
+          width={"100%"}
+          defaultOutputTokenAddress={daiOrigin}
+          theme={uniswapStyle}
+        />
+      </div>
       <style jsx>{`
         .dai-title-swap {
           display: flex;
           justify-content: space-between;
           align-items: baseline;
+          margin-bottom: 15px;
         }
 
         .dai-title-swap:hover {
@@ -61,8 +87,13 @@ export function DaiSwap() {
           cursor: pointer;
         }
 
-        iframe {
-          display: ${show ? "block" : "none"}
+        iframe, .uniswap {
+          display: ${show ? "block" : "none"};
+          width: 100%;
+        }
+
+        .uniswap .BaseButton {
+          color: white;
         }
 
         @media only screen and (max-width: 600px) {
