@@ -27,6 +27,7 @@ export default function Switch({
                     width: 40px;
                     height: 25px;
                     opacity: ${disabled ? 0.6 : 1};
+                    margin-left: 5px;
                 }
 
                 .switch input {

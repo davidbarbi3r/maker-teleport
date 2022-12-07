@@ -14,6 +14,7 @@ import { approveGateway, teleportDai } from "../utils/teleportDai";
 import { NetworkSwitch } from "./NetworkSwitch";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import Input from "./Input";
+import Switch from "../../app/components/Switch";
 
 type Props = {};
 
@@ -47,6 +48,9 @@ function Bridger({}: Props) {
   const [gatewayAllowance, setGatewayAllowance] = useState<BigNumber>(
     BigNumber.from(0)
   );
+
+  // To allow user to useRelay option or not
+  const [useRelay, setUseRelay] = useState(true);
 
   // Use effect to reinstantiate the bridge every time we switch networks
   useEffect(() => {
@@ -171,7 +175,6 @@ function Bridger({}: Props) {
         </div>
       )}
 
-      
       <div className="quote level">
         <p>
           Teleporting DAI from L1 to L2 is still not supported. Please use{" "}
@@ -208,7 +211,14 @@ function Bridger({}: Props) {
         )}
       </div>
 
-      <h3>3. Bridge</h3>
+      <div className="bridge-title">
+        <h3>3. Bridge</h3>
+        {selectedAmount.gt(0) &&
+            isSupported(origin.id, destiny.id) &&
+            bridge && <p>
+          Use relay: <Switch checked={useRelay} disabled={false} onChange={setUseRelay}/>
+        </p>}
+      </div>
 
       {selectedAmount.lte(0) && (
         <div>Select how much DAI you want to bridge first.</div>
@@ -313,7 +323,6 @@ function Bridger({}: Props) {
           font-weight: bold;
         }
 
-  
         .instructions {
           margin-top: 15px;
         }
@@ -327,6 +336,12 @@ function Bridger({}: Props) {
           width: 50%;
           margin-left: 15px;
           margin-right: 15px;
+        }
+
+        .bridge-title {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
         }
       `}</style>
     </div>
