@@ -4,8 +4,10 @@ import Button from "../../app/components/Button";
 
 export function NetworkSwitch({
   destiny,
+  title = "Switch network to"
 }: {
   destiny: Chain;
+  title?: string
 }): React.ReactElement {
   const { switchNetwork } = useSwitchNetwork();
 
@@ -25,7 +27,7 @@ export function NetworkSwitch({
 
   return (
     <Button onClick={onClickSwitchNetwork}>
-      {loading ? "Changing network..." : `Switch Network to ${destiny.name}`}
+      {loading ? "Changing network..." : `${title} ${destiny.name}`}
     </Button>
   );
 }

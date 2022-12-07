@@ -106,15 +106,26 @@ export default function BridgeNetworkSelector({
           text-align: center;
         }
 
+        h3 {
+          margin-top: 0;
+        }
+
         select {
           width: 100%;
         }
 
         .origin,
         .destiny {
-          padding-left: 15px;
-          padding-right: 15px;
+  
           width: 50%;
+        }
+
+        .origin {
+          padding-right: 15px;
+        }
+
+        .destiny {
+          padding-left: 15px;
         }
       `}</style>
     </div>

@@ -1,5 +1,5 @@
 import { BigNumber, ethers, Signer } from "ethers";
-import { parseUnits } from "ethers/lib/utils.js";
+import { formatUnits, parseUnits } from "ethers/lib/utils.js";
 import React, { useContext, useEffect, useState } from "react";
 import Button from "../../app/components/Button";
 import { chains, getRPCforChainId } from "../../providers/wagmi";
@@ -13,6 +13,7 @@ import Fees from "./Fees";
 import { approveGateway, teleportDai } from "../utils/teleportDai";
 import { NetworkSwitch } from "./NetworkSwitch";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import Input from "./Input";
 
 type Props = {};
 
@@ -150,35 +151,54 @@ function Bridger({}: Props) {
   return (
     <div className="bridger-container">
       {!address && (
-        <div className="connect-wallet">
+        <div className="connect-wallet level">
           <p>Please, connect your wallet to continue.</p>
           <ConnectButton />
         </div>
       )}
       <h3>1. Select networks</h3>
-      <BridgeNetworkSelector
-        origin={origin}
-        destiny={destiny}
-        onChangeOrigin={setOrigin}
-        onChangeDestiny={setDestiny}
-      />
+      <div className="level">
+        <BridgeNetworkSelector
+          origin={origin}
+          destiny={destiny}
+          onChangeOrigin={setOrigin}
+          onChangeDestiny={setDestiny}
+        />
+      </div>
       {address && !isInOriginNetwork && (
-        <div className="network-switch">
+        <div className="level">
           <NetworkSwitch destiny={origin} />
         </div>
       )}
+
+      
+      <div className="quote level">
+        <p>
+          Teleporting DAI from L1 to L2 is still not supported. Please use{" "}
+          <a href="https://bridge.arbitrum.io/?l2ChainId=42161">Arbitrum</a> or{" "}
+          <a href="https://app.optimism.io/bridge/deposit">Optimism</a> official
+          bridges.
+          <br />
+          Official Maker Teleport support happening on 2023.
+        </p>
+      </div>
       <h3>2. Select DAI amount</h3>
-      <div className="selector">
+      <div className="selector level">
         {balanceInCurrentChain.gt(0) && (
           <div className="input">
-            <input
-              type="number"
-              value={formatDai(selectedAmount)}
-              onChange={(e) => setSelectedAmount(parseUnits(e.target.value))}
-            />
+            <Input value={selectedAmount} onChange={setSelectedAmount} />
+
+            <div className="input-action">
+              <Button
+                secondary
+                onClick={() => setSelectedAmount(balanceInCurrentChain)}
+              >
+                Max
+              </Button>
+            </div>
           </div>
         )}
-        <div className="balance">
+        <div className="level">
           <DaiBalance chain={origin} onSelectBalance={setSelectedAmount} />
         </div>
         {address && balanceInCurrentChain.lte(0) && (
@@ -194,45 +214,55 @@ function Bridger({}: Props) {
         <div>Select how much DAI you want to bridge first.</div>
       )}
 
-      {selectedAmount.gt(0) && isSupported(origin.id, destiny.id) && bridge && (
+      {address && !isInOriginNetwork ? (
+        <div className="network-switch level">
+          <NetworkSwitch destiny={origin} title="First switch to" />
+        </div>
+      ) : (
         <div>
-          {hasSufficientBalance && (
-            <div>
-              <div className="actions">
-                <div className="action">
-                  <Button
-                    fullWidth
-                    disabled={
-                      hasEnoughAllowance(selectedAmount) || loadingApprove
-                    }
-                    onClick={onClickApproveDAI}
-                  >
-                    {loadingApprove
-                      ? "Approving..."
-                      : hasEnoughAllowance(selectedAmount)
-                      ? "Approved"
-                      : "Approve DAI"}
-                  </Button>
-                </div>
-                <div className="action">
-                  <Button
-                    fullWidth
-                    disabled={!hasEnoughAllowance(selectedAmount)}
-                    onClick={onClickBridgeDAI}
-                  >
-                    {loadingBridge ? "Bridging..." : "Bridge"}
-                  </Button>
-                </div>
-              </div>
-              <div className="instructions">
-                You are going to bridge {formatDai(selectedAmount)} DAI from{" "}
-                {origin.name} to {destiny.name}.
-                <Fees bridge={bridge} selectedAmount={selectedAmount} />
-              </div>
-            </div>
-          )}
+          {selectedAmount.gt(0) &&
+            isSupported(origin.id, destiny.id) &&
+            bridge && (
+              <div>
+                {hasSufficientBalance && (
+                  <div>
+                    <div className="actions">
+                      <div className="action">
+                        <Button
+                          fullWidth
+                          disabled={
+                            hasEnoughAllowance(selectedAmount) || loadingApprove
+                          }
+                          onClick={onClickApproveDAI}
+                        >
+                          {loadingApprove
+                            ? "Approving..."
+                            : hasEnoughAllowance(selectedAmount)
+                            ? "Approved"
+                            : "Approve DAI"}
+                        </Button>
+                      </div>
+                      <div className="action">
+                        <Button
+                          fullWidth
+                          disabled={!hasEnoughAllowance(selectedAmount)}
+                          onClick={onClickBridgeDAI}
+                        >
+                          {loadingBridge ? "Bridging..." : "Bridge"}
+                        </Button>
+                      </div>
+                    </div>
+                    <div className="instructions">
+                      You are going to bridge {formatDai(selectedAmount)} DAI
+                      from {origin.name} to {destiny.name}.
+                      <Fees bridge={bridge} selectedAmount={selectedAmount} />
+                    </div>
+                  </div>
+                )}
 
-          {!hasSufficientBalance && <div>Insufficient Balance</div>}
+                {!hasSufficientBalance && <div>Insufficient Balance</div>}
+              </div>
+            )}
         </div>
       )}
 
@@ -257,18 +287,33 @@ function Bridger({}: Props) {
           justify-content: center;
         }
 
+        .level {
+          margin-top: 15px;
+          margin-bottom: 15px;
+        }
+
         .input {
-          margin: 15px;
+          display: flex;
+          align-items: center;
         }
 
-        .network-switch {
-          padding: 15px;
+        .input-action {
+          margin-left: 15px;
         }
 
-        .balance {
-          margin: 15px;
+        .quote {
+          font-size: 13px;
+          padding: 5px 15px;
+          background: #f5f5dc9a;
+          border-left: 2px solid black;
         }
 
+        .quote a {
+          color: black;
+          font-weight: bold;
+        }
+
+  
         .instructions {
           margin-top: 15px;
         }

@@ -7,6 +7,7 @@ import { formatUnits } from "ethers/lib/utils.js";
 import { DaiBalanceContext } from "../context/BalanceContext";
 import Button from "../../app/components/Button";
 import { formatDai } from "../utils/formatDai";
+import DaiIcon from "./DaiIcon";
 
 export default function DaiBalance({
   chain,
@@ -29,16 +30,16 @@ export default function DaiBalance({
             <div className="title">DAI balance</div>
             <div className="network">{chain.name}</div>
           </div>
-          <div className="amount">{formatDai(currentChainBalance)}</div>
+          <div className="amount"><span style={{ marginRight: '5px'}}>{formatDai(currentChainBalance)}</span> <DaiIcon width={15} /></div>
         </div>
-        <div className="action">
+        {/* <div className="action">
           <Button
             secondary
             onClick={() => onSelectBalance(currentChainBalance)}
           >
             Max
           </Button>
-        </div>
+        </div> */}
       </div>
 
       <style jsx>{`
@@ -55,6 +56,12 @@ export default function DaiBalance({
         .content {
           display: flex;
           align-items: flex-end;
+          justify-content: center;
+        }
+
+        .amount {
+          display: flex;
+          align-items: center;
           justify-content: center;
         }
 
