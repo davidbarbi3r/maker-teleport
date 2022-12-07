@@ -53,7 +53,7 @@ export function DaiSwap() {
           <Image src="/images/right-arrow.svg" width={20} height={20} alt="Right arrow" />
         </div>
       </div>
-      <div className="uniswap">
+      <div className="uniswap-container">
         {/* <iframe
           src={`https://app.uniswap.org/#/swap?exactField=input&outputCurrency=${daiOrigin}`}
           height="660px"
@@ -63,6 +63,7 @@ export function DaiSwap() {
           width={"100%"}
           defaultOutputTokenAddress={daiOrigin}
           theme={uniswapStyle}
+          className="uniswap"
         />
       </div>
       <style jsx>{`
@@ -81,19 +82,19 @@ export function DaiSwap() {
           display: flex;
           align-item: center;
           transform: ${show ? "rotate(90deg)" : "rotate(0deg)"};
+          transition: transform 0.3s;
         }
 
         .arrow:hover {
           cursor: pointer;
         }
 
-        iframe, .uniswap {
-          display: ${show ? "block" : "none"};
+        .uniswap-container {
+          opacity: ${show ? 1 : 0 };
+          height: ${show ? "auto" : 0};
           width: 100%;
-        }
-
-        .uniswap .BaseButton {
-          color: white;
+          overflow: hidden;
+          transition: all 0.4s;
         }
 
         @media only screen and (max-width: 600px) {
