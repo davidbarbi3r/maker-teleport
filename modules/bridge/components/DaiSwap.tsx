@@ -64,6 +64,13 @@ export function DaiSwap() {
         iframe {
           display: ${show ? "block" : "none"}
         }
+
+        @media only screen and (max-width: 600px) {
+          .dai-title-swap {
+            font-size: 10px;
+          }
+
+        }
       `}
       </style>
     </div>

@@ -127,6 +127,20 @@ export default function BridgeNetworkSelector({
         .destiny {
           padding-left: 15px;
         }
+
+        @media only screen and (max-width: 600px) {
+          .container {
+            flex-direction: column;
+            align-items: center;
+          }
+
+          .origin,
+          .destiny {
+            width: 80%;
+            padding: 0;
+            margin-bottom: 15px;
+          }
+        }
       `}</style>
     </div>
   );

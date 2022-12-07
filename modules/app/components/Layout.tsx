@@ -46,6 +46,12 @@ export function Layout({
           padding: 30px;
           margin: 0 auto;
         }
+
+        @media only screen and (max-width: 600px) {
+          .main {
+            padding: 0;
+          }
+        }
       `}</style>
     </React.Fragment>
   );

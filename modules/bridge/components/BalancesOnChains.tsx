@@ -98,6 +98,13 @@ export default function BalancesOnChains() {
         .network-title {
           font-weight: bold;
         }
+
+        @media only screen and (max-width: 600px) {
+          .wrapper {
+            margin: 0 auto;
+            max-width: 95%;
+          }
+        }
       `}</style>
     </div>
   );

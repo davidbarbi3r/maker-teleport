@@ -144,7 +144,7 @@ function Bridger({}: Props) {
       setLoadingBridge(true);
 
       try {
-        await teleportDai(bridge, selectedAmount, signer as Signer);
+        await teleportDai(bridge, selectedAmount, signer as Signer, undefined, useRelay);
         setLoadingBridge(false);
       } catch (e) {
         setLoadingBridge(false);
@@ -342,6 +342,30 @@ function Bridger({}: Props) {
           display: flex;
           align-items: center;
           justify-content: space-between;
+        }
+
+        @media only screen and (max-width: 600px) {
+          .bridger-container {
+            max-width: 95%;
+            margin: 0 auto;
+          }
+
+          .actions {
+            flex-direction: column;
+            align-items: center;
+          }
+
+          .action {
+            margin-bottom: 15px;
+          }
+
+          .input {
+            flex-direction: column;
+          }
+
+          .input-action {
+            margin-top: 15px;
+          }
         }
       `}</style>
     </div>
