@@ -235,6 +235,10 @@ function Bridger({}: Props) {
               <div>
                 {hasSufficientBalance && (
                   <div>
+                    <div className="fees">
+                      
+                      <Fees bridge={bridge} selectedAmount={selectedAmount} />
+                    </div>
                     <div className="actions">
                       <div className="action">
                         <Button
@@ -261,10 +265,7 @@ function Bridger({}: Props) {
                         </Button>
                       </div>
                     </div>
-                    <div className="fees">
-                      
-                      <Fees bridge={bridge} selectedAmount={selectedAmount} />
-                    </div>
+                    
                   </div>
                 )}
 
@@ -329,7 +330,7 @@ function Bridger({}: Props) {
         }
 
         .fees {
-          margin-top: 30px;
+          margin-bottom: 30px;
         }
 
         .actions {
