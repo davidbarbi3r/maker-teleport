@@ -30,7 +30,7 @@ export default function DaiBalance({
             <div className="title">DAI balance</div>
             <div className="network">{chain.name}</div>
           </div>
-          <div className="amount"><span style={{ marginRight: '5px'}}>{formatDai(currentChainBalance)}</span> <DaiIcon width={15} /></div>
+          <div className="amount"><span style={{ marginRight: '5px'}}>~{formatDai(currentChainBalance)}</span> <DaiIcon width={15} /></div>
         </div>
         {/* <div className="action">
           <Button

@@ -187,6 +187,7 @@ function Bridger({}: Props) {
       </div>
       <h3>2. Select DAI amount</h3>
       <div className="selector level">
+        <DaiBalance chain={origin} onSelectBalance={setSelectedAmount} />
         {balanceInCurrentChain.gt(0) && (
           <div className="input">
             <Input value={selectedAmount} onChange={setSelectedAmount} />
@@ -201,15 +202,13 @@ function Bridger({}: Props) {
             </div>
           </div>
         )}
-        <div className="level">
-          <DaiBalance chain={origin} onSelectBalance={setSelectedAmount} />
-        </div>
-        {address && balanceInCurrentChain.lte(0) && (
-          <div>
+       
+      </div>
+      {address && balanceInCurrentChain.lte(0) && (
+          <div className="level">
             Insufficient DAI balance on {origin.name}. Get some DAI first
           </div>
         )}
-      </div>
 
       <div className="bridge-title">
         <h3>3. Bridge</h3>
@@ -262,9 +261,8 @@ function Bridger({}: Props) {
                         </Button>
                       </div>
                     </div>
-                    <div className="instructions">
-                      You are going to bridge {formatDai(selectedAmount)} DAI
-                      from {origin.name} to {destiny.name}.
+                    <div className="fees">
+                      
                       <Fees bridge={bridge} selectedAmount={selectedAmount} />
                     </div>
                   </div>
@@ -323,8 +321,15 @@ function Bridger({}: Props) {
           font-weight: bold;
         }
 
-        .instructions {
-          margin-top: 15px;
+        .selector {
+          display: flex;
+          align-items: center;
+          flex-direction: row;
+          justify-content: space-between;
+        }
+
+        .fees {
+          margin-top: 30px;
         }
 
         .actions {
@@ -355,17 +360,23 @@ function Bridger({}: Props) {
             align-items: center;
           }
 
-          .action {
-            margin-bottom: 15px;
+          .selector {
+            flex-direction: column;
+            align-items: flex-start;
           }
 
           .input {
-            flex-direction: column;
-          }
-
-          .input-action {
             margin-top: 15px;
           }
+
+          .action {
+            margin-bottom: 15px;
+            width: 100%;
+            margin-right: 0;
+            margin-left: 0;
+          }
+
+        
         }
       `}</style>
     </div>

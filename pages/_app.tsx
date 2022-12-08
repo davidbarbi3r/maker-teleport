@@ -22,7 +22,7 @@ function App({ Component, pageProps }: AppProps) {
       />
       <Component {...pageProps} />
 
-      <ToastContainer position="top-center" theme="dark" />
+      <ToastContainer position="top-right" theme="light" />
       <style jsx global>{`
         :root {
           --gap: 16pt;
@@ -36,6 +36,14 @@ function App({ Component, pageProps }: AppProps) {
           --text-secondary-color: grey;
           --alt-text-main-color: var(--primary);
           --alt-text-secondary-color: grey;
+          --accents-1: #f9fafc;
+          --accents-2: #eaeaea;
+          --accents-3: #999;
+          --accents-4: #888;
+          --accents-5: #666;
+          --accents-6: #444;
+          --accents-7: #333;
+          --accents-8: #111;
         }
 
         * {
@@ -128,7 +136,7 @@ function App({ Component, pageProps }: AppProps) {
         }
 
         .Toastify__toast-container {
-          font-size: 20px;
+          font-size: 15px;
         }
       `}</style>
     </div>

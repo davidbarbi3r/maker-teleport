@@ -1,4 +1,5 @@
 import { BigNumber, Signer } from "ethers";
+import { toast } from "react-toastify";
 import { TeleportBridge, TeleportGUID } from "teleport-sdk";
 import { Chain, useSwitchNetwork } from "wagmi";
 
@@ -11,8 +12,13 @@ export const approveGateway = async (
   if (allowance.eq(BigNumber.from(0)) || allowance.lt(selectedAmount)) {
     try {
       await bridge.approveSrcGateway(signer, selectedAmount);
-    } catch (error) {
-      window.alert("Ops an error occured 😭, check the console");
+    } catch (error: any) {
+      if (error?.message?.includes('user rejected transaction')) {
+        toast.warn('User rejected transaction');
+      }else {
+        toast.error('Error approving DAI allowance.')
+      }
+      
       console.log(error);
     }
   }

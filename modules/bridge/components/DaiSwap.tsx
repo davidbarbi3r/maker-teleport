@@ -4,10 +4,9 @@ import Image from "next/image";
 import { contracts } from "../../../eth-sdk/config";
 import { SwapWidget, Theme, darkTheme } from "@uniswap/widgets";
 
-
 export function DaiSwap() {
   const { chain } = useNetwork();
-  const [show, setShow] = useState(false)
+  const [show, setShow] = useState(false);
 
   // get correct DAI unit
   const getDaiContractAddress = (id: number) => {
@@ -25,85 +24,96 @@ export function DaiSwap() {
 
   const uniswapStyle: Theme = {
     ...darkTheme,
-    primary: 'black',
-    secondary: 'black',
-    interactive: '#1aab9b',
-    container: '#f2efef',
-    module: '#fff',
-    accent: '#1aab9b',
-    outline: '#1aab9b',
-    dialog: '#FFF',
-    fontFamily: 'FT Polar Trial',
+    primary: "black",
+    secondary: "black",
+    interactive: "#1aab9b",
+    container: "#f2efef",
+    module: "#fff",
+    accent: "#1aab9b",
+    outline: "#1aab9b",
+    dialog: "#FFF",
+    fontFamily: "FT Polar Trial",
     borderRadius: 30,
     tokenColorExtraction: true,
-    fontFamilyCode: "white"
-  }
+    fontFamilyCode: "white",
+  };
 
   const daiOrigin = getDaiContractAddress(chain ? chain.id : 1);
-
+  const isAllowedNetwork =
+    chain?.id === chainId.mainnet ||
+    chain?.id === chainId.arbitrum ||
+    chain?.id === chainId.optimism;
   return (
     <div>
-      <div className="dai-title-swap" onClick={() => setShow((prev) => !prev)}>
-        <h2>Quickly get some DAI with {" "} 
-          <a style={{color: 'black'}} href={`https://app.uniswap.org/#/swap?exactField=input&outputCurrency=${daiOrigin}`}>
-            Uniswap
-          </a>
-        </h2>
-        <div className="arrow">
-          <Image src="/images/right-arrow.svg" width={20} height={20} alt="Right arrow" />
-        </div>
-      </div>
-      <div className="uniswap-container">
-        {/* <iframe
+      {isAllowedNetwork && (
+        <div>
+          <div
+            className="dai-title-swap"
+            onClick={() => setShow((prev) => !prev)}
+          >
+            <h2>Quickly get some DAI with Uniswap</h2>
+            <div className="arrow">
+              <Image
+                src="/images/right-arrow.svg"
+                width={20}
+                height={20}
+                alt="Right arrow"
+              />
+            </div>
+          </div>
+          <div className="uniswap-container">
+            {/* <iframe
           src={`https://app.uniswap.org/#/swap?exactField=input&outputCurrency=${daiOrigin}`}
           height="660px"
           width="100%"
         /> */}
-        <SwapWidget
-          width={"100%"}
-          defaultOutputTokenAddress={daiOrigin}
-          theme={uniswapStyle}
-          className="uniswap"
-        />
-      </div>
-      <style jsx>{`
-        .dai-title-swap {
-          display: flex;
-          justify-content: space-between;
-          align-items: baseline;
-          margin-bottom: 15px;
-        }
-
-        .dai-title-swap:hover {
-          cursor: pointer;
-        }
-
-        .arrow {
-          display: flex;
-          align-item: center;
-          transform: ${show ? "rotate(90deg)" : "rotate(0deg)"};
-          transition: transform 0.3s;
-        }
-
-        .arrow:hover {
-          cursor: pointer;
-        }
-
-        .uniswap-container {
-          opacity: ${show ? 1 : 0 };
-          height: ${show ? "auto" : 0};
-          width: 100%;
-          overflow: hidden;
-          transition: all 0.4s;
-        }
-
-        @media only screen and (max-width: 600px) {
+            <SwapWidget
+              width={"100%"}
+              defaultOutputTokenAddress={daiOrigin}
+              theme={uniswapStyle}
+              className="uniswap"
+            />
+          </div>
+        </div>
+      )}
+      <style jsx>
+        {`
           .dai-title-swap {
-            font-size: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 15px;
           }
 
-        }
-      `}
+          .dai-title-swap:hover {
+            cursor: pointer;
+          }
+
+          .arrow {
+            display: flex;
+            align-item: center;
+            transform: ${show ? "rotate(90deg)" : "rotate(0deg)"};
+            transition: transform 0.3s;
+          }
+
+          .arrow:hover {
+            cursor: pointer;
+          }
+
+          .uniswap-container {
+            opacity: ${show ? 1 : 0};
+            height: ${show ? "auto" : 0};
+            width: 100%;
+            overflow: hidden;
+            transition: all 0.4s;
+          }
+
+          @media only screen and (max-width: 600px) {
+            .dai-title-swap {
+              font-size: 10px;
+            }
+          }
+        `}
       </style>
     </div>
   );
