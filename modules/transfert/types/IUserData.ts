@@ -1,10 +1,11 @@
+import { ITeleportData } from "./ITeleportData"
+
 export interface IUserData {
-    id: number
-    amount: string,
-    origin: string,
-    destiny: string,
-    feesPaid: string,
-    feesOtherBridge: string,
-    amountSaved: string,
-    date: number
+    id: string
+    amountBridged: string
+    countBridged: string
+    destinyChain: string
+    originChain: string
+    teleport : ITeleportData[]
 }
+
