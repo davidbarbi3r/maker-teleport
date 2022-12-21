@@ -64,6 +64,7 @@ export default function Transfers({}: Props) {
                   <a key={tx.id} className="transaction" href={getTransactionDetails(tx.id)}>
                     <li>{new Date(parseInt(tx.date)*1000).toDateString()}</li>
                     <li>{formatDai(BigNumber.from(tx.amount))} dai</li>
+                    <li>from {data.originChain}</li>
                   </a>
                 )}
                 </div>
