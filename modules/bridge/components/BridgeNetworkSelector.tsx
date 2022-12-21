@@ -1,6 +1,7 @@
-import { useEffect, useRef } from "react"
+import { useEffect, useRef } from "react";
 import { Chain, chainId } from "wagmi";
 import { chains } from "../../providers/wagmi";
+import { isL1, isL2, isTestnet } from "../utils/isLayer";
 
 export default function BridgeNetworkSelector({
   origin,
@@ -14,11 +15,7 @@ export default function BridgeNetworkSelector({
   onChangeDestiny: (c: Chain) => void;
 }): React.ReactElement {
   const allNetworks = chains;
-  const originRef = useRef<HTMLSelectElement | null>(null)
-  
-  const isL1 = (id: number) => id === chainId.mainnet;
-  const isL2 = (id: number) => id === chainId.optimism || id === chainId.arbitrum;
-  const isTestnet = (id: number) => id === chainId.goerli;
+  const originRef = useRef<HTMLSelectElement | null>(null);
 
   // handles the change of the select origin
   const onChangeSelectOrigin = (val: number) => {
@@ -30,35 +27,32 @@ export default function BridgeNetworkSelector({
   };
 
   //added && !isL1(i.id) to filter out L1 origin
-  const originNetworks = chains.filter(i => !isTestnet(i.id) && !isL1(i.id));
-  const destinyNetworks = chains.filter((i) => i.id !== origin.id).filter(i => {
-    if (isL1(origin.id)) {
-      // Origin is L1, show only L2
-      return isL2(i.id)
-    } else {
-      return isL1(i.id )
-    }
-  });
+  const originNetworks = chains.filter((i) => !isTestnet(i.id) && !isL1(i.id));
+  const destinyNetworks = chains
+    .filter((i) => i.id !== origin.id)
+    .filter((i) => {
+      if (isL1(origin.id)) {
+        // Origin is L1, show only L2
+        return isL2(i.id);
+      } else {
+        return isL1(i.id);
+      }
+    });
 
-  //added this piece of code because when switched to a L2 chain for origin, 
-  //the destiny remained set as previous value instead of ethereum 
+  //added this piece of code because when switched to a L2 chain for origin,
+  //the destiny remained set as previous value instead of ethereum
   useEffect(() => {
-    if (originRef.current?.value && isL2(parseInt(originRef.current?.value))){
-      onChangeDestiny(chains[0])
-      
+    if (originRef.current?.value && isL2(parseInt(originRef.current?.value))) {
+      onChangeDestiny(chains[0]);
     }
 
-    if (originRef.current?.value && isL1(parseInt(originRef.current?.value))){
-      onChangeDestiny(chains[2])
-      
+    if (originRef.current?.value && isL1(parseInt(originRef.current?.value))) {
+      onChangeDestiny(chains[2]);
     }
-  }, [originRef.current?.value])
+  }, [originRef.current?.value]);
 
-  
-
-  // Current supported bridges are L1 -> L2, L2 -> L1. 
+  // Current supported bridges are L1 -> L2, L2 -> L1.
   // L2->L2 is NOT supported yet.
-
 
   return (
     <div>
@@ -116,7 +110,6 @@ export default function BridgeNetworkSelector({
 
         .origin,
         .destiny {
-  
           width: 50%;
         }
 

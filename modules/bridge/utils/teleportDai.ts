@@ -3,26 +3,6 @@ import { toast } from "react-toastify";
 import { TeleportBridge, TeleportGUID } from "teleport-sdk";
 import { Chain, useSwitchNetwork } from "wagmi";
 
-export const approveGateway = async (
-  bridge: TeleportBridge,
-  signer: Signer,
-  selectedAmount: BigNumber,
-  allowance: BigNumber
-) => {
-  if (allowance.eq(BigNumber.from(0)) || allowance.lt(selectedAmount)) {
-    try {
-      await bridge.approveSrcGateway(signer, selectedAmount);
-    } catch (error: any) {
-      if (error?.message?.includes('user rejected transaction')) {
-        toast.warn('User rejected transaction');
-      }else {
-        toast.error('Error approving DAI allowance.')
-      }
-      
-      console.log(error);
-    }
-  }
-};
 
 export const teleportDai = async (
   bridge: TeleportBridge,

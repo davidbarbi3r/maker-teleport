@@ -63,6 +63,7 @@ export default function Input({
         .error {
           border: 1px solid red;
         }
+        
       `}</style>
     </React.Fragment>
   );

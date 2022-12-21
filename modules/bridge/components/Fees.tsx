@@ -40,10 +40,17 @@ export default function Fees({ bridge, selectedAmount }: Props) {
           {fees && `${formatUnits(totalFee)} DAI`}
         </div>
       </div>
-      {fees ? <div className="explanation">
-        The teleport fee is {formatUnits(fees?.bridgeFee).slice(0, 6)} DAI. The relayer fee is {formatUnits(fees?.relayFee || 0).slice(0, 6)} DAI.
-      </div> : <LoadingPlaceholder />}
-      
+      <div className="explanation">
+        {fees ? (
+          <div>
+            The teleport fee is {formatUnits(fees?.bridgeFee).slice(0, 6)} DAI.
+            The relayer fee is {formatUnits(fees?.relayFee || 0).slice(0, 6)}{" "}
+            DAI.
+          </div>
+        ) : (
+          <LoadingPlaceholder />
+        )}{" "}
+      </div>
 
       <style jsx>
         {`

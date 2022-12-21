@@ -94,6 +94,16 @@ export default function Home() {
             transform: rotateY(360deg);
           }
         }
+
+        @media only screen and (max-width: 600px) {
+          h1 {
+            font-size: 20px;
+          }
+
+          .subtitle {
+            font-size: 15px;
+          }
+        }
       `}</style>
     </Layout>
   );

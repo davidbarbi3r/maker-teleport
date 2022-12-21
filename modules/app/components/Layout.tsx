@@ -39,7 +39,7 @@ export function Layout({
           padding: 0;
           max-width: 100%;
           margin: 0 auto;
-          background: url('/dai-bridge.png');
+          background: url('/dai-bridge-hd-nobg.png');
           background-position: 50% 50px;
         
           background-size: 1000px;
@@ -53,6 +53,9 @@ export function Layout({
         }
 
         @media only screen and (max-width: 600px) {
+          .body {
+            background-size: 600px 400px;
+          }
           .main {
             padding: 0;
           }
