@@ -277,16 +277,13 @@ function Bridger({}: Props) {
 
       <style jsx>{`
         .bridger-container {
-          background: rgba(183, 168, 168, 0.18);
-          width: 100%;
-          max-width: 1000px;
-          border-radius: 16px;
-          box-shadow: 5px 4px 10px rgba(0, 0, 0, 0.15);
+          background: rgba(0, 0, 0, 0.4);
+          
+          border-radius: 4px;
           backdrop-filter: blur(3.2px);
           -webkit-backdrop-filter: blur(3.2px);
-          border: 1px solid rgba(183, 168, 168, 0.35);
-          padding: 2em;
-          margin: 1em;
+          padding: 30px;
+          font-size: 20px;
         }
 
         .connect-wallet {
@@ -311,14 +308,14 @@ function Bridger({}: Props) {
         }
 
         .quote {
-          font-size: 13px;
+          font-size: 15px;
           padding: 5px 15px;
-          background: #f5f5dc9a;
+          background: #5e5e5e9a;
           border-left: 2px solid black;
         }
 
         .quote a {
-          color: black;
+          color: white;
           font-weight: bold;
         }
 

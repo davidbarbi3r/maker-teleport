@@ -24,14 +24,14 @@ export function DaiSwap() {
 
   const uniswapStyle: Theme = {
     ...darkTheme,
-    primary: "black",
-    secondary: "black",
+    primary: "white",
+    secondary: "white",
     interactive: "#1aab9b",
-    container: "#f2efef",
-    module: "#fff",
+    container: "#1A1A1A",
+    module: "#1A1A1A",
     accent: "#1aab9b",
     outline: "#1aab9b",
-    dialog: "#FFF",
+    dialog: "#1A1A1A",
     fontFamily: "FT Polar Trial",
     borderRadius: 30,
     tokenColorExtraction: true,
@@ -94,6 +94,7 @@ export function DaiSwap() {
             align-item: center;
             transform: ${show ? "rotate(90deg)" : "rotate(0deg)"};
             transition: transform 0.3s;
+           
           }
 
           .arrow:hover {

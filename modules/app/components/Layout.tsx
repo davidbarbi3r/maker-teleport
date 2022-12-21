@@ -6,7 +6,7 @@ import config from "../../config";
 
 export function Layout({
   children,
-  metaDescription,
+  metaDescription = "Bridge DAI easily",
 }: {
   children: React.ReactNode;
   metaDescription?: string;
@@ -39,6 +39,11 @@ export function Layout({
           padding: 0;
           max-width: 100%;
           margin: 0 auto;
+          background: url('/dai-bridge.png');
+          background-position: 50% 50px;
+        
+          background-size: 1000px;
+          background-repeat: no-repeat;
         }
 
         .main {

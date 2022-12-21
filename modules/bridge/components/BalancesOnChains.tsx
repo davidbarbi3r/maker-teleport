@@ -56,28 +56,12 @@ export default function BalancesOnChains() {
       )}
       <style jsx>{`
         .wrapper {
-          background: linear-gradient(
-              98.21deg,
-              rgb(255, 251, 232) 2.63%,
-              rgb(255, 240, 232) 99.63%
-            ),
-            linear-gradient(
-              127.5deg,
-              rgb(228, 249, 201) 0%,
-              rgb(232, 255, 245) 49.48%,
-              rgb(249, 225, 235) 100%
-            );
-
+          background: #0000006d;
           background-repeat: no-repeat;
-          padding: 15px;
-          border-radius: 16px;
-          box-shadow: 5px 4px 10px rgba(0, 0, 0, 0.15);
-          backdrop-filter: blur(3.2px);
-          -webkit-backdrop-filter: blur(3.2px);
-          border: 1px solid rgba(183, 168, 168, 0.35);
-          width: 100%;
-          max-width: 1000px;
-          margin: 1em;
+          padding: 30px;
+          border-radius: 4px;
+         
+          
         }
         .title {
           font-weight: bold;

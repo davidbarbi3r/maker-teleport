@@ -4,7 +4,6 @@ import { useAccount } from "wagmi";
 import Bridger from "../modules/bridge/components/Bridger";
 import { Layout } from "../modules/app/components/Layout";
 import BalancesOnChains from "../modules/bridge/components/BalancesOnChains";
-import Decoration from "../modules/app/components/Decoration";
 import Image from "next/image";
 
 export default function Home() {
@@ -19,15 +18,14 @@ export default function Home() {
   return (
     <Layout>
       <div className="page-bg">
-        <Decoration />
-      </div>
+        
       <div className="page-content">
         <div className="title">
           <h1>Maker Teleport</h1>
           <div className="subtitle">
-            Move DAI from one network to another using the safe and cheap Maker
-            Teleport Bridge.
+            The most secure way to bridge DAI
           </div>
+          <div className="powered">Powered by Maker</div>
           <div className="image" style={{ marginTop: "15px" }}>
             <Image src="/images/dai-logo.png" width={50} height={50} alt="DAI Logo"/>
           </div>
@@ -43,27 +41,39 @@ export default function Home() {
           </div>
         )}
       </div>
+      </div>
       <style jsx>{`
         .page-content {
-          max-width: 600px;
+          max-width: 800px;
         }
         .page-bg {
-          box-sizing: border-box;
-          margin: 0px;
-          min-width: 0px;
-          position: absolute;
-          left: calc((100% - 1882px) / 2);
-          top: -200px;
-          right: 0px;
-          z-index: -1;
-          background-color: white;
-          overflow: hidden;
+         
         }
 
         .title {
           text-align: center;
           margin-bottom: 60px;
           padding: 15px;
+        }
+
+        h1 {
+          font-size: 50px;
+          margin-bottom: 0;
+          text-shadow: 1px 2px 3px black;
+          letter-spacing: 3px;
+        }
+
+        .subtitle {
+          font-size: 30px;
+          text-shadow: 1px 2px 3px black;
+          margin-bottom: 5px;
+          letter-spacing: 3px;
+        }
+
+        .powered {
+          margin-bottom: 50px;
+          text-shadow: 1px 2px 3px black;
+          color: #68cbb9;
         }
 
         .balances {

@@ -6,7 +6,7 @@ export function Footer() {
     <div>
       <div className="footer">
         <div className="link">
-          <Link href="/about">About</Link>
+          <a style={{color: 'white'}} href="">GitHub</a>
         </div>
       </div>
       <div style={{ padding: "30px", textAlign: "center" }}>

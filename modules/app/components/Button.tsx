@@ -28,13 +28,14 @@ function Button({
         {`
           .std-btn {
             border: 1px solid rgba(183, 168, 168, 0.35);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-            border-radius: 30px;
+            box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
             padding: 0.75em 2.5em;
             background-color: var(--primary);
             color: white;
             font-weight: bold;
-            font-size: 0.9rem;
+            font-size: 20px;
+            padding: 20px;
             transition: all 150ms;
             opacity: ${disabled ? "60%" : "100%"};
             margin-right: 1em;
@@ -49,6 +50,7 @@ function Button({
           .std-btn:hover {
             transform: ${disabled ? "": "scale(1.05)"};
             cursor: ${disabled ? "not-allowed" : "pointer"};
+            filter: brightness(85%);
           }
 
           .std-btn:active {

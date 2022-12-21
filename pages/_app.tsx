@@ -9,12 +9,13 @@ import { chains, wagmiClient } from "../modules/providers/wagmi";
 import { lightTheme, darkTheme, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import config from "../modules/config";
 import { DaiBalanceContextProvider } from "../modules/bridge/context/BalanceContext"
+import Head from "next/head";
 
 function App({ Component, pageProps }: AppProps) {
   return (
     <div>
       <NextNprogress
-        color="#29D"
+        color={config.palette.maker}
         startPosition={0.3}
         stopDelayMs={200}
         height={3}
@@ -22,17 +23,17 @@ function App({ Component, pageProps }: AppProps) {
       />
       <Component {...pageProps} />
 
-      <ToastContainer position="top-right" theme="light" />
+      <ToastContainer position="top-right" theme="dark" />
       <style jsx global>{`
         :root {
           --gap: 16pt;
           --black-background: ${config.palette.background};
-          --page-background-color: ${config.palette.background};
+          --page-background-color: #071415;
           --primary: ${config.palette.maker};
           --secondary: #c793c0;
           --alt-secondary: #65215c;
           --alt-background-color: grey;
-          --text-main-color: ${config.palette.text};
+          --text-main-color: white;
           --text-secondary-color: grey;
           --alt-text-main-color: var(--primary);
           --alt-text-secondary-color: grey;
@@ -108,29 +109,28 @@ function App({ Component, pageProps }: AppProps) {
         }
 
         input {
-          padding: 15px;
+          padding: 20px;
+          font-size: 20px;
           border: 1px solid;
-          border-color: var(--primary);
+          border-color: #6c6c6c;
           border-radius: 4px;
+          background: #1A1A1A;
+          color: white;
+
         }
 
         select {
-          padding: 15px;
+          padding: 20px;
           border: 1px solid;
-          border-color: var(--primary);
+          border-color: #6c6c6c;
           border-radius: 4px;
-        }
-
-        button {
-          background: var(--primary);
+          background: #1A1A1A;
           color: white;
-          padding: 15px;
-          font-weight: bold;
-          border: none;
-          border-radius: 15px;
-          font-weight: 500;
+          font-size: 20px;
+
         }
 
+       
         img {
           max-width: 100%;
         }
@@ -145,6 +145,15 @@ function App({ Component, pageProps }: AppProps) {
 export default function AppWrapper(props: any) {
   return (
     <div>
+      <Head>
+        <title>
+          Maker Teleport
+        </title>
+        <meta
+          name="description"
+          content={"The fastest and safest way to bridge DAI"}
+        />
+      </Head>
       <WagmiConfig client={wagmiClient}>
         <RainbowKitProvider chains={chains} theme={lightTheme({
           accentColor: config.palette.maker,

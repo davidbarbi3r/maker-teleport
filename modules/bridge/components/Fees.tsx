@@ -54,6 +54,7 @@ export default function Fees({ bridge, selectedAmount }: Props) {
             align-items: flex-end;
             justify-content: space-between;
             margin-top: 15px;
+            margin-bottom: 5px;
           }
           .text {
             line-height: 15px;
@@ -66,7 +67,7 @@ export default function Fees({ bridge, selectedAmount }: Props) {
 
           .explanation {
             font-size: 13px;
-            color: var(--accents-6);
+            color: var(--accents-2);
             display: flex;
             justify-content: flex-end;
           }
