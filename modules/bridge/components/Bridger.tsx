@@ -58,10 +58,6 @@ function Bridger({}: Props) {
   // To allow user to useRelay option or not
   const [useRelay, setUseRelay] = useState(true);
 
-  // Helper to determine if the  user approved enough DAI
-  const hasEnoughAllowance = (selectedAmount: BigNumber) => {
-    return allowance.gte(selectedAmount);
-  };
   // DAI balance on all supported chains
   const { balanceOfChain } = useContext(DaiBalanceContext);
 
@@ -193,14 +189,14 @@ function Bridger({}: Props) {
                         <Button
                           fullWidth
                           disabled={
-                            hasEnoughAllowance(selectedAmount) ||
+                            allowance.gte(selectedAmount) ||
                             isLoadingApprove
                           }
                           onClick={() => approve(selectedAmount)}
                         >
                           {isLoadingApprove ? (
                             "Approving..."
-                          ) : hasEnoughAllowance(selectedAmount) ? (
+                          ) : allowance.gte(selectedAmount) ? (
                             <span>
                               Approved <Icon name="paperCheck" />
                             </span>
@@ -212,7 +208,7 @@ function Bridger({}: Props) {
                       <div className="action">
                         <Button
                           fullWidth
-                          disabled={!hasEnoughAllowance(selectedAmount)}
+                          disabled={!allowance.gte(selectedAmount)}
                           onClick={onClickBridgeDAI}
                         >
                           {loadingBridge ? "Bridging..." : "Bridge"}
