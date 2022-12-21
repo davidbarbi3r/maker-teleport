@@ -1,14 +1,13 @@
-import { BigNumber, ethers, Signer } from "ethers";
+import { BigNumber } from "ethers";
 import React, { useContext, useEffect, useState } from "react";
 import Button from "../../app/components/Button";
 import { chains } from "../../providers/wagmi";
 import BridgeNetworkSelector from "./BridgeNetworkSelector";
 import DaiBalance from "./DaiBalance";
 import { DaiBalanceContext } from "../context/BalanceContext";
-import { chainId, useAccount, useNetwork, useSigner } from "wagmi";
+import { chainId, useAccount, useNetwork } from "wagmi";
 
 import Fees from "./Fees";
-import { teleportDai } from "../utils/teleportDai";
 import { NetworkSwitch } from "./NetworkSwitch";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import Input from "./Input";
@@ -18,12 +17,12 @@ import Icon from "../../app/components/Icon";
 import { useDAIAllowance } from "../hooks/useDAIAllowance";
 import { useBridge } from "../hooks/useBridge";
 import { isL2 } from "../utils/isLayer";
+import { useBridgeTransfer } from "../hooks/useBridgeTransfer";
 
 type Props = {};
 
 function Bridger({}: Props) {
   const { address } = useAccount();
-  const { data: signer } = useSigner();
   const { chain } = useNetwork();
 
   // Amount that the user will bridge
@@ -34,10 +33,10 @@ function Bridger({}: Props) {
   const [destiny, setDestiny] = useState(chains[0]);
 
   useEffect(() => {
-    if(chain && isL2(chain.id)) {
-      setOrigin(chain)
+    if (chain && isL2(chain.id)) {
+      setOrigin(chain);
     }
-  }, [chain])
+  }, [chain]);
 
   function isSupported(originId: number, destinyId: number): Boolean {
     if (
@@ -54,6 +53,7 @@ function Bridger({}: Props) {
   const bridge = useBridge(origin, destiny);
   const { approve, allowance, isLoadingAllowances, isLoadingApprove } =
     useDAIAllowance(bridge);
+  const { transfer, isLoadingBridgeTransfer } = useBridgeTransfer(bridge);
 
   // To allow user to useRelay option or not
   const [useRelay, setUseRelay] = useState(true);
@@ -66,29 +66,6 @@ function Bridger({}: Props) {
 
   // Used to switch network
   const isInOriginNetwork = chain && chain.id === origin.id;
-
-  // Approve / Bridge logic
-  // UI states for the approve / bridge buttons
-  const [loadingBridge, setLoadingBridge] = useState(false);
-
-  const onClickBridgeDAI = async () => {
-    if (bridge) {
-      setLoadingBridge(true);
-
-      try {
-        await teleportDai(
-          bridge,
-          selectedAmount,
-          signer as Signer,
-          undefined,
-          useRelay
-        );
-        setLoadingBridge(false);
-      } catch (e) {
-        setLoadingBridge(false);
-      }
-    }
-  };
 
   return (
     <div className="bridger-container">
@@ -189,8 +166,7 @@ function Bridger({}: Props) {
                         <Button
                           fullWidth
                           disabled={
-                            allowance.gte(selectedAmount) ||
-                            isLoadingApprove
+                            allowance.gte(selectedAmount) || isLoadingApprove
                           }
                           onClick={() => approve(selectedAmount)}
                         >
@@ -209,9 +185,11 @@ function Bridger({}: Props) {
                         <Button
                           fullWidth
                           disabled={!allowance.gte(selectedAmount)}
-                          onClick={onClickBridgeDAI}
+                          onClick={() =>
+                            transfer(selectedAmount, useRelay, origin, destiny)
+                          }
                         >
-                          {loadingBridge ? "Bridging..." : "Bridge"}
+                          {isLoadingBridgeTransfer ? "Bridging..." : "Bridge"}
                         </Button>
                       </div>
                     </div>
