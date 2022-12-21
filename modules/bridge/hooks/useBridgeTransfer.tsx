@@ -32,44 +32,54 @@ export function useBridgeTransfer(bridge: TeleportBridge | null) {
       setIsLoadingBridgeTransfer(true);
 
       try {
-        const initTeleportCall = await bridge.initTeleport(
-          address as string,
-          selectedAmount,
-          undefined,
-          signer
-        );
+        const fees = await bridge.getAmounts(selectedAmount);
+
+        // If the fees is less than the bridging amount, we disable the relayer
+        // TODO: Consider if we should do this or just prompt the user with the choice
+        if (fees.relayFee && selectedAmount.lt(fees.relayFee)) {
+          useRelay = false;
+        }
+
+        const initTeleportCall = useRelay
+          ? await bridge.initRelayedTeleport(
+              address as string,
+              selectedAmount,
+              signer
+            )
+          : await bridge.initTeleport(
+              address as string,
+              selectedAmount,
+              undefined,
+              signer
+            );
 
         listenTransaction(initTeleportCall.tx!, chain!.id, `Init teleport`)
           .then(async (transaction) => {
-            toast.success("Teleport initialized");
-            // Recheck dai allowance
-
-            //getting all values needed to send all to a relayer
-            const guid = await bridge.getTeleportGuidFromTxHash(
+            toast.success(
+              useRelay
+                ? "Teleport initialized with relayer..."
+                : "Teleport initialized without relayer"
+            );
+            // Request attestations
+            const { signatures, teleportGUID } = await bridge.getAttestations(
               initTeleportCall.tx!.hash
             );
-            const attestations = await bridge.getAttestations(
-              initTeleportCall.tx!.hash
-            );
 
-            const fees = await bridge.getAmounts(selectedAmount);
+            // ***********************************************************************/
+            // ***********  getAmountsForTeleportGUID (before mint) ******************/
+            // ***********************************************************************/
 
-            // If the fees is less than the bridging amount, we disable the relayer
-            // TODO: Consider if we should do this or just prompt the user with the choice
-            if (fees.relayFee && selectedAmount.lt(fees.relayFee)) {
-              useRelay = false;
-            }
+            const { mintable, pending, bridgeFee, relayFee } =
+              await bridge.getAmountsForTeleportGUID(teleportGUID);
 
             if (useRelay) {
-              //sending GUID and attestations to a relayer (the user pay L1 gas fees in DAI to a relayer who pay L1 gas fee for him)
-
               // TX Hash on destiny chain.
 
               const mintWithRelayTxHash = await bridge.relayMintWithOracles(
                 signer,
-                guid,
-                attestations.signatures,
-                fees.relayFee as BigNumber,
+                teleportGUID,
+                signatures,
+                relayFee as BigNumber,
                 maxFees,
                 undefined,
                 to,
@@ -100,8 +110,8 @@ export function useBridgeTransfer(bridge: TeleportBridge | null) {
               );
 
               const mintWithOraclesCall = await bridge.mintWithOracles(
-                guid,
-                attestations.signatures,
+                teleportGUID,
+                signatures,
                 maxFees,
                 undefined,
                 signer
@@ -129,10 +139,10 @@ export function useBridgeTransfer(bridge: TeleportBridge | null) {
       } catch (error: any) {
         setIsLoadingBridgeTransfer(false);
         if (error?.message?.includes("user rejected transaction")) {
-            toast.warn("User rejected transaction");
-          } else {
-            toast.error("Error teleporting DAI.");
-          }
+          toast.warn("User rejected transaction");
+        } else {
+          toast.error("Error teleporting DAI.");
+        }
       }
     }
   };
