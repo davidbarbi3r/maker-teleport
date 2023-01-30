@@ -1,50 +1,78 @@
 import { BigNumber } from "ethers";
 import { formatUnits } from "ethers/lib/utils.js";
-import { useEffect, useState } from "react";
+import useSWR from "swr";
 import { TeleportBridge } from "teleport-sdk";
 import LoadingPlaceholder from "../../app/components/LoadingPlaceholder";
 import { IFees } from "../types/IFees";
-import { formatDai } from "../utils/formatDai";
 
 type Props = {
   bridge: TeleportBridge;
   selectedAmount: BigNumber;
 };
 
+type FetchFeesResponse = {
+  fees: IFees;
+  relayerActive: boolean;
+  totalFees: BigNumber;
+  amountReceivedWithRelayer: BigNumber;
+};
+
+async function fetchFees(
+  bridge: TeleportBridge,
+  selectedAmount: BigNumber
+): Promise<FetchFeesResponse> {
+  const fees = await bridge.getAmounts(selectedAmount);
+
+  const totalFees = fees.relayFee
+    ? fees.relayFee.add(fees.bridgeFee)
+    : fees.bridgeFee;
+
+  const relayerActive = totalFees.gt(selectedAmount);
+
+  return {
+    fees,
+    amountReceivedWithRelayer: fees.mintable.sub(totalFees),
+    totalFees,
+    relayerActive,
+  };
+}
+
 export default function Fees({ bridge, selectedAmount }: Props) {
-  // Get fees for teleport
-  const [fees, setFees] = useState<IFees | null>(null);
+  const { data, error, isValidating } = useSWR<FetchFeesResponse>(
+    selectedAmount.gt(0) ? `bridge-fees-${selectedAmount.toString()}` : null,
+    () => fetchFees(bridge, selectedAmount)
+  );
 
-  useEffect(() => {
-    bridge.getAmounts(selectedAmount).then((res) => setFees(res));
-  }, [bridge, selectedAmount]);
-
-  const totalFee = fees
-    ? fees.relayFee
-      ? fees.relayFee.add(fees.bridgeFee)
-      : fees.bridgeFee
-    : BigNumber.from(0);
+  // TODO: Show the right amounts received with or without relayer
+  // Inform the user on how to withdraw the dai if he/she doesn't want to use the relayer
+  // Add a button to use the relayer
+  // Add a button to withdraw the dai without using the relayer
+  // Automatically switch on/off the toggle of the relayer based on the user fees
   return (
     <div>
       <div className="received">
         <div className="text">DAI received</div>
         <div className="amount">
-          {!fees && <LoadingPlaceholder />}
-          {fees && `${formatUnits(fees.mintable)} DAI`}
+          {!data && isValidating && <LoadingPlaceholder />}
+          {data && `${formatUnits(data.fees.mintable)} DAI`}
+          {data &&
+            data.fees.mintable.eq(selectedAmount) &&
+            data.totalFees.lte(selectedAmount) &&
+            formatUnits(data.amountReceivedWithRelayer)}
         </div>
       </div>
       <div className="fees">
         <div className="text">Fees</div>
         <div className="amount">
-          {!fees && <LoadingPlaceholder />}
-          {fees && `${formatUnits(totalFee)} DAI`}
+          {!data && <LoadingPlaceholder />}
+          {data && `${formatUnits(data.totalFees)} DAI`}
         </div>
       </div>
       <div className="explanation">
-        {fees ? (
+        {data ? (
           <div>
-            The teleport fee is {formatUnits(fees?.bridgeFee).slice(0, 6)} DAI.
-            The relayer fee is {formatUnits(fees?.relayFee || 0).slice(0, 6)}{" "}
+            The teleport fee is {formatUnits(data.fees.bridgeFee).slice(0, 6)} DAI.
+            The relayer fee is {formatUnits(data.fees.relayFee || 0).slice(0, 6)}{" "}
             DAI.
           </div>
         ) : (

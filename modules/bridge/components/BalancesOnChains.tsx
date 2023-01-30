@@ -2,13 +2,15 @@ import { BigNumber } from "ethers";
 import Image from "next/image";
 import { useContext } from "react";
 import { useAccount } from "wagmi";
+import LoadingPlaceholder from "../../app/components/LoadingPlaceholder";
 import { DaiBalanceContext } from "../context/BalanceContext";
 import { formatDai } from "../utils/formatDai";
 import { DaiSwap } from "./DaiSwap";
+import { GetSomeDai } from "./GetSomeDai";
 
 export default function BalancesOnChains() {
   const { address } = useAccount();
-  const { balance } = useContext(DaiBalanceContext);
+  const { balance, isLoading } = useContext(DaiBalanceContext);
 
   //Check if total DAI Balance on chain equal 0
   const isTotalZero = balance.total.eq(BigNumber.from(0));
@@ -24,7 +26,8 @@ export default function BalancesOnChains() {
           <div className="networks">
             <div className="network">
               <div className="network-title">Mainet</div>{" "}
-              <div className="balance">{formatDai(balance.mainnet)} DAI</div>
+              {!isLoading && <div className="balance">{formatDai(balance.mainnet)} DAI</div>}
+              {isLoading && <LoadingPlaceholder />}
             </div>
             {/* <div className="network">
               <div className="network-title">Goerli</div>{" "}
@@ -32,22 +35,20 @@ export default function BalancesOnChains() {
             </div> */}
             <div className="network">
               <div className="network-title">Optimism</div>{" "}
-              <div className="balance">{formatDai(balance.optimism)} DAI</div>
+              {!isLoading && <div className="balance">{formatDai(balance.optimism)} DAI</div>}
+              {isLoading && <LoadingPlaceholder />}
             </div>
             <div className="network">
               <div className="network-title">Arbitrum</div>{" "}
-              <div className="balance">{formatDai(balance.arbitrum)} DAI</div>
+              {!isLoading && <div className="balance">{formatDai(balance.arbitrum)} DAI</div>}
+              {isLoading && <LoadingPlaceholder />}
             </div>
           </div>
 
           {isTotalZero && (
             <div>
               <p>
-                Your address has 0.00 DAI. Get some DAI first on apps like
-                Uniswap or mint some opening a vault on{" "}
-                <a style={{ color: "inherit" }} href="https://oasis.app/">
-                  Oasis App
-                </a>
+                Your address has 0.00 DAI.<GetSomeDai />
               </p>
             </div>
           )}

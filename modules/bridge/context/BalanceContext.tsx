@@ -12,6 +12,7 @@ interface IBalanceContext {
   balance: IDaiBalance;
   balanceOfChain: (chain: Chain) => BigNumber
   refresh: () => void;
+  isLoading: boolean,
   error: any;
 }
 
@@ -53,8 +54,9 @@ const DaiBalanceContextProvider = (props: ContextProviderProps) => {
 
   const { address } = useAccount();
 
+  console.log(address)
   // Fetches every network balance using the configured providers
-  const { data, mutate, error } = useSWR<IDaiBalance>(
+  const { data, mutate, error, isValidating } = useSWR<IDaiBalance>(
     address ? `dai-balances-${address}` : null,
     async () => {
       const respMainnet = await contractMainnet.balanceOf(address);
@@ -106,7 +108,7 @@ const DaiBalanceContextProvider = (props: ContextProviderProps) => {
   }
 
   return (
-    <DaiBalanceContext.Provider value={{ balance, balanceOfChain, refresh: mutate, error }}>
+    <DaiBalanceContext.Provider value={{ balance, balanceOfChain, isLoading: !data && isValidating, refresh: mutate, error }}>
       {props.children}
     </DaiBalanceContext.Provider>
   );

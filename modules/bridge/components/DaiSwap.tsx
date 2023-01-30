@@ -6,7 +6,7 @@ import { SwapWidget, Theme, darkTheme } from "@uniswap/widgets";
 
 export function DaiSwap() {
   const { chain } = useNetwork();
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState(true);
 
   // get correct DAI unit
   const getDaiContractAddress = (id: number) => {

@@ -8,13 +8,16 @@ import { DaiBalanceContext } from "../context/BalanceContext";
 import Button from "../../app/components/Button";
 import { formatDai } from "../utils/formatDai";
 import DaiIcon from "./DaiIcon";
+import LoadingPlaceholder from "../../app/components/LoadingPlaceholder";
 
 export default function DaiBalance({
   chain,
   onSelectBalance,
+  isLoading = false
 }: {
   chain: Chain;
   onSelectBalance: (val: BigNumber) => void;
+  isLoading?: boolean;
 }): React.ReactElement {
   const { balanceOfChain } = useContext(DaiBalanceContext);
 
@@ -30,7 +33,7 @@ export default function DaiBalance({
             <div className="title">DAI balance</div>
             <div className="network">{chain.name}</div>
           </div>
-          <div className="amount"><span style={{ marginRight: '5px'}}>~{formatDai(currentChainBalance)}</span> <DaiIcon width={15} /></div>
+          <div className="amount"><span style={{ marginRight: '5px'}}>{!isLoading ? `~${formatDai(currentChainBalance)}` : <LoadingPlaceholder />}</span> <DaiIcon width={15} /></div>
         </div>
         {/* <div className="action">
           <Button

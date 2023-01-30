@@ -4,9 +4,9 @@ import React, { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 import { Layout } from "../modules/app/components/Layout";
 import { formatDai } from "../modules/bridge/utils/formatDai";
-import { IUserData } from "../modules/transfert/types/IUserData";
-import { getOptimismTeleportData } from "../modules/transfert/utils/getTeleportData";
-import { getTransactionDetails } from "../modules/transfert/utils/getTransactionDetails";
+import { IUserData } from "../modules/transfer/types/IUserData";
+import { getOptimismTeleportData } from "../modules/transfer/utils/getTeleportData";
+import { getTransactionDetails } from "../modules/transfer/utils/getTransactionDetails";
 
 type Props = {};
 

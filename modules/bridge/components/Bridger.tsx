@@ -18,6 +18,7 @@ import { useDAIAllowance } from "../hooks/useDAIAllowance";
 import { useBridge } from "../hooks/useBridge";
 import { isL2 } from "../utils/isLayer";
 import { useBridgeTransfer } from "../hooks/useBridgeTransfer";
+import { GetSomeDai } from "./GetSomeDai";
 
 type Props = {};
 
@@ -59,7 +60,7 @@ function Bridger({}: Props) {
   const [useRelay, setUseRelay] = useState(true);
 
   // DAI balance on all supported chains
-  const { balanceOfChain } = useContext(DaiBalanceContext);
+  const { balanceOfChain, isLoading: isLoadingBalances } = useContext(DaiBalanceContext);
 
   const balanceInCurrentChain = balanceOfChain(origin);
   const hasSufficientBalance = selectedAmount.lte(balanceInCurrentChain);
@@ -102,7 +103,7 @@ function Bridger({}: Props) {
       </div>
       <h3>2. Select DAI amount</h3>
       <div className="selector level">
-        <DaiBalance chain={origin} onSelectBalance={setSelectedAmount} />
+        <DaiBalance chain={origin} onSelectBalance={setSelectedAmount} isLoading={isLoadingBalances} />
         {balanceInCurrentChain.gt(0) && (
           <div className="input">
             <div className="input-wr">
@@ -122,7 +123,7 @@ function Bridger({}: Props) {
       </div>
       {address && balanceInCurrentChain.lte(0) && (
         <div className="level">
-          Insufficient DAI balance on {origin.name}. Get some DAI first
+          Insufficient DAI balance on {origin.name}. <GetSomeDai />
         </div>
       )}
 
